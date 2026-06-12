@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("vantagePMO-platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d0c8ab8a37ddc7ffc7289df0f6a115c55e8bf6f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7470ab4f2bdc408e09383cb700c726ebfee773d")]
 [assembly: System.Reflection.AssemblyProductAttribute("vantagePMO-platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("vantagePMO-platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
