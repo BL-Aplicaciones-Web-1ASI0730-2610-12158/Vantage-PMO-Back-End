@@ -20,13 +20,39 @@ interceptor de auditoría, convención kebab-case y manejo global de excepciones
 
 ## Requisitos previos
 
-- [.NET SDK 10](https://dotnet.microsoft.com/download)
-- Una base de datos **MySQL 8** accesible
+- **[.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0)** (no basta con .NET 11 u otra versión)
+- **Docker** (recomendado) o una instancia de **MySQL 8** accesible en `localhost:3306`
 - (Opcional) Herramienta EF: `dotnet tool install --global dotnet-ef`
 
-## Configuración
+### Instalar .NET SDK 10
 
-La cadena de conexión se define en `vantagePMO-platform/appsettings.Development.json`:
+En Windows, con winget:
+
+```powershell
+winget install Microsoft.DotNet.SDK.10
+```
+
+Cierra y vuelve a abrir la terminal después de instalar. Comprueba que aparece la versión 10:
+
+```powershell
+dotnet --list-sdks
+dotnet --list-runtimes
+```
+
+Debes ver entradas `10.0.xxx`. Si solo tienes .NET 11, `dotnet run` compilará pero fallará al ejecutar con:
+
+```
+You must install or update .NET to run this application.
+Framework: 'Microsoft.NETCore.App', version '10.0.0' (x64)
+```
+
+## Levantar el proyecto
+
+Sigue estos pasos en orden:
+
+### 1. Base de datos MySQL
+
+La cadena de conexión en `vantagePMO-platform/appsettings.Development.json` es:
 
 ```json
 "ConnectionStrings": {
@@ -34,35 +60,42 @@ La cadena de conexión se define en `vantagePMO-platform/appsettings.Development
 }
 ```
 
-### Levantar MySQL con Docker
+**Primera vez** — crear el contenedor:
 
 ```bash
 docker run --name vantage-mysql -e MYSQL_ROOT_PASSWORD=root1234 -e MYSQL_DATABASE=vantage-pmo-db -p 3306:3306 -d mysql:8
 ```
 
-## Compilar
+**Si el contenedor ya existe** (error `container name is already in use`):
+
+```bash
+docker start vantage-mysql
+```
+
+Espera 10–30 segundos a que MySQL termine de iniciar antes de arrancar la API.
+
+### 2. Compilar y ejecutar
 
 ```bash
 cd vantagePMO-platform
 dotnet restore
 dotnet build
+dotnet run --launch-profile http
 ```
-
-## Ejecutar
 
 Las migraciones de EF Core se aplican automáticamente al iniciar (`Database.Migrate()`),
-por lo que basta con tener MySQL arriba:
+así que MySQL debe estar arriba antes de ejecutar `dotnet run`.
 
-```bash
-cd vantagePMO-platform
-dotnet run
+Si todo va bien verás:
+
+```
+Now listening on: http://localhost:5278
+Hosting environment: Development
 ```
 
-La API queda disponible en `http://localhost:5278`.
+### 3. Abrir Swagger
 
-## Ver Swagger en el navegador
-
-Con la aplicación corriendo (en entorno `Development`), abre:
+Con la aplicación corriendo (solo en entorno `Development`), abre en el navegador:
 
 ```
 http://localhost:5278/swagger
@@ -83,6 +116,16 @@ curl -s http://localhost:5278/swagger/v1/swagger.json
 # (con jq) ver solo los paths
 curl -s http://localhost:5278/swagger/v1/swagger.json | jq ".paths | keys"
 ```
+
+## Problemas frecuentes
+
+| Síntoma | Causa | Solución |
+|---------|-------|----------|
+| Swagger no carga / conexión rechazada en `localhost:5278` | La API no arrancó | Revisa la terminal: debe aparecer `Now listening on: http://localhost:5278` |
+| `You must install or update .NET... version '10.0.0'` | Falta el SDK/runtime de .NET 10 | Instala con `winget install Microsoft.DotNet.SDK.10` y reinicia la terminal |
+| `Unable to connect to any of the specified MySQL hosts` | MySQL no está corriendo o aún no está listo | `docker start vantage-mysql` y espera unos segundos |
+| `container name "/vantage-mysql" is already in use` | El contenedor ya fue creado antes | Usa `docker start vantage-mysql` en lugar de `docker run` |
+| Swagger devuelve 404 | Entorno distinto de `Development` | Ejecuta con `dotnet run --launch-profile http` |
 
 ## Endpoints de Profiles
 
