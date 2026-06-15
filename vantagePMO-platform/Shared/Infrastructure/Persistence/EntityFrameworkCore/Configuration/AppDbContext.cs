@@ -1,5 +1,6 @@
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
@@ -38,7 +39,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.ApplyProfilesConfiguration();
 
         // IAM Context
-        builder.ApplyIamConfiguration();
+        // builder.ApplyIamConfiguration(); // TODO: enable when the IAM bounded context is implemented.
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
