@@ -35,9 +35,10 @@ public class ProblemDetailsFactory
         Enum? errorEnum, // The specific error enum (IamError, ProfilesError, etc.)
         string detailMessage) // The localized message from the application service
     {
-        // Error resx keys are qualified with the enum type name (e.g. "ProfilesError.ProfileNotFound").
+        // The application service already provides the fully localized and formatted message,
+        // so it is reused as the title to avoid leaking unformatted placeholders (e.g. "{0}").
         var title = errorEnum != null
-            ? _errorLocalizer[$"{errorEnum.GetType().Name}.{errorEnum}"]
+            ? detailMessage
             : _commonLocalizer["GenericError"];
 
         // Leverage the base ProblemDetailsFactory for initial creation
