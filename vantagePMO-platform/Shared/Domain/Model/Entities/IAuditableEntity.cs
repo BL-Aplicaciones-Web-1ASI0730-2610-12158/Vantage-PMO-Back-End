@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Shared.Domain.Model.Entities;
+namespace vantagePMO_platform.Shared.Domain.Model.Entities;
 
 /// <summary>
 ///     Marks an entity as carrying audit timestamps managed by the persistence layer.

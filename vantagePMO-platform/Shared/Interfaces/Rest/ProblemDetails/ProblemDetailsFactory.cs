@@ -1,5 +1,5 @@
-using VantagePMO_platform.Shared.Resources.Errors;
-using VantagePMO_platform.Shared.Resources;
+using vantagePMO_platform.Shared.Resources.Errors;
+using vantagePMO_platform.Shared.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 // For base ProblemDetailsFactory
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 // For StatusCodes
 
-namespace VantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
+namespace vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
 
 public class ProblemDetailsFactory
 {
