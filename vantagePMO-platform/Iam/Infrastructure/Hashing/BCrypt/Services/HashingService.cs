@@ -1,4 +1,4 @@
-using Acme.Center.Platform.Iam.Application.Internal.OutboundServices;
+using vantagePMO_platform.Iam.Application.Internal.OutboundServices;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace vantagePMO_platform.Iam.Infrastructure.Hashing.BCrypt.Services;
