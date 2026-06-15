@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
-using VantagePMO_platform.Profiles.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Profiles.Domain.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
-namespace VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+namespace vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
 ///     EF Core implementation of <see cref="IProfileRepository" />.

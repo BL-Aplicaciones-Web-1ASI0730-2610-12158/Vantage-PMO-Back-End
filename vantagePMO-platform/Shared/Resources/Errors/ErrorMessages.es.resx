@@ -12,6 +12,18 @@
     <data name="IamError.UsernameAlreadyTaken" xml:space="preserve">
     <value>El nombre de usuario {0} ya está en uso.</value>
   </data>
+    <data name="IamError.EmailAlreadyRegistered" xml:space="preserve">
+    <value>La dirección de correo electrónico {0} ya está registrada.</value>
+  </data>
+    <data name="IamError.InvalidProfileData" xml:space="preserve">
+    <value>Datos de perfil inválidos proporcionados.</value>
+  </data>
+    <data name="IamError.InvalidDateOfBirth" xml:space="preserve">
+    <value>La fecha de nacimiento debe usar el formato {0}.</value>
+  </data>
+    <data name="IamError.PasswordMismatch" xml:space="preserve">
+    <value>La contraseña y la confirmación no coinciden.</value>
+  </data>
     <data name="IamError.InvalidCredentials" xml:space="preserve">
     <value>Nombre de usuario o contraseña inválidos.</value>
   </data>

@@ -4,91 +4,114 @@ using vantagePMO_platform.Iam.Domain.Model;
 using vantagePMO_platform.Iam.Domain.Model.Aggregates;
 using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Domain.Repositories;
-using vantagePMO_platform.Shared.Resources.Errors;
+using vantagePMO_platform.Profiles.Application.Errors;
+using vantagePMO_platform.Profiles.Interfaces.Acl;
 using vantagePMO_platform.Shared.Application.Model;
 using vantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Resources.Errors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-// For IamError enum
-
 namespace vantagePMO_platform.Iam.Application.Internal.CommandServices;
 
-/**
- * <summary>
- *     The user command service
- * </summary>
- * <remarks>
- *     This class is used to handle user commands
- * </remarks>
- */
 public class UserCommandService(
     IUserRepository userRepository,
     ITokenService tokenService,
     IHashingService hashingService,
+    IProfilesContextFacade profilesContextFacade,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer) // Inject IStringLocalizer
+    IStringLocalizer<ErrorMessages> localizer)
     : IUserCommandService
 {
-    private readonly IStringLocalizer<ErrorMessages> _localizer = localizer;
-
-    /**
-     * <summary>
-     *     Handle sign in command
-     * </summary>
-     * <param name="command">The sign in command</param>
-     * <param name="cancellationToken">The cancellation token</param>
-     * <returns>The authenticated user and the JWT token</returns>
-     */
     public async Task<Result<(User user, string token)>> Handle(SignInCommand command,
         CancellationToken cancellationToken)
     {
         var user = await userRepository.FindByUsernameAsync(command.Username, cancellationToken);
 
-        if (user == null || !hashingService.VerifyPassword(command.Password, user.PasswordHash))
-            return Result<(User user, string token)>.Failure(IamError.InvalidCredentials,
-                _localizer[nameof(IamError.InvalidCredentials)]);
+        if (user is null || !hashingService.VerifyPassword(command.Password, user.PasswordHash))
+            return Result<(User user, string token)>.Failure(
+                IamError.InvalidCredentials,
+                localizer[$"IamError.{nameof(IamError.InvalidCredentials)}"]);
 
         var token = tokenService.GenerateToken(user);
 
         return Result<(User user, string token)>.Success((user, token));
     }
 
-    /**
-     * <summary>
-     *     Handle sign up command
-     * </summary>
-     * <param name="command">The sign-up command</param>
-     * <param name="cancellationToken">The cancellation token</param>
-     * <returns>A confirmation message on successful creation.</returns>
-     */
     public async Task<Result> Handle(SignUpCommand command, CancellationToken cancellationToken)
     {
         if (await userRepository.ExistsByUsernameAsync(command.Username, cancellationToken))
-            return Result.Failure(IamError.UsernameAlreadyTaken,
-                _localizer[nameof(IamError.UsernameAlreadyTaken), command.Username]);
+            return Result.Failure(
+                IamError.UsernameAlreadyTaken,
+                localizer[$"IamError.{nameof(IamError.UsernameAlreadyTaken)}", command.Username]);
 
         var hashedPassword = hashingService.HashPassword(command.Password);
         var user = new User(command.Username, hashedPassword);
         try
         {
             await userRepository.AddAsync(user, cancellationToken);
+
+            var profileResult = await profilesContextFacade.CreateProfile(
+                new CreateProfileRequest(
+                    command.FullName,
+                    command.Email,
+                    command.Role,
+                    command.DateOfBirth,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    Array.Empty<string>(),
+                    Array.Empty<string>(),
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty),
+                cancellationToken);
+
+            if (profileResult.IsFailure)
+                return MapProfileErrorToSignUpResult(profileResult);
+
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result.Success();
         }
         catch (OperationCanceledException)
         {
-            return Result.Failure(IamError.OperationCancelled, _localizer[nameof(IamError.OperationCancelled)]);
+            return Result.Failure(
+                IamError.OperationCancelled,
+                localizer[$"IamError.{nameof(IamError.OperationCancelled)}"]);
         }
         catch (DbUpdateException)
         {
-            // Log the exception details here if an ILogger is injected
-            return Result.Failure(IamError.DatabaseError, _localizer[nameof(IamError.DatabaseError)]);
+            return Result.Failure(
+                IamError.DatabaseError,
+                localizer[$"IamError.{nameof(IamError.DatabaseError)}"]);
         }
         catch (Exception)
         {
-            // Log the exception details here if an ILogger is injected
-            return Result.Failure(IamError.InternalServerError, _localizer[nameof(IamError.InternalServerError)]);
+            return Result.Failure(
+                IamError.InternalServerError,
+                localizer[$"IamError.{nameof(IamError.InternalServerError)}"]);
         }
+    }
+
+    private Result MapProfileErrorToSignUpResult(Result<int> profileResult)
+    {
+        return profileResult.Error switch
+        {
+            ProfilesError.EmailAlreadyRegistered =>
+                Result.Failure(IamError.EmailAlreadyRegistered, profileResult.Message),
+            ProfilesError.InvalidProfileData =>
+                Result.Failure(IamError.InvalidProfileData, profileResult.Message),
+            ProfilesError.OperationCancelled =>
+                Result.Failure(IamError.OperationCancelled, profileResult.Message),
+            ProfilesError.DatabaseError =>
+                Result.Failure(IamError.DatabaseError, profileResult.Message),
+            _ =>
+                Result.Failure(IamError.InternalServerError, profileResult.Message)
+        };
     }
 }

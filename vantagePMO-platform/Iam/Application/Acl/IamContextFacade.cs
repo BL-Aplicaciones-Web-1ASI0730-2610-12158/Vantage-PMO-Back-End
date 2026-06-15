@@ -11,7 +11,15 @@ public class IamContextFacade(IUserCommandService userCommandService, IUserQuery
 {
     public async Task<int> CreateUser(string username, string password, CancellationToken cancellationToken)
     {
-        var signUpCommand = new SignUpCommand(username, password);
+        var email = username.Contains('@') ? username : $"{username}@users.local";
+        var signUpCommand = new SignUpCommand(
+            username,
+            password,
+            username,
+            email,
+            string.Empty,
+            new DateOnly(2000, 1, 1));
+
         var signUpResult = await userCommandService.Handle(signUpCommand, cancellationToken);
         if (signUpResult.IsFailure) return 0;
         var getUserByUsernameQuery = new GetUserByUsernameQuery(username);

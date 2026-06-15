@@ -5,7 +5,13 @@ namespace vantagePMO_platform.Iam.Domain.Model.Commands;
  *     The sign up command
  * </summary>
  * <remarks>
- *     This command object includes the username and password to sign up
+ *     Carries the credentials and profile data collected during registration.
  * </remarks>
  */
-public record SignUpCommand(string Username, string Password);
+public record SignUpCommand(
+    string Username,
+    string Password,
+    string FullName,
+    string Email,
+    string Role,
+    DateOnly DateOfBirth);

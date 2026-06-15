@@ -22,6 +22,10 @@ public static class IamActionResultAssembler
         {
             IamError.InvalidCredentials => StatusCodes.Status400BadRequest,
             IamError.UsernameAlreadyTaken => StatusCodes.Status409Conflict,
+            IamError.EmailAlreadyRegistered => StatusCodes.Status409Conflict,
+            IamError.InvalidProfileData => StatusCodes.Status400BadRequest,
+            IamError.InvalidDateOfBirth => StatusCodes.Status400BadRequest,
+            IamError.PasswordMismatch => StatusCodes.Status400BadRequest,
             IamError.OperationCancelled => StatusCodes.Status409Conflict,
             IamError.DatabaseError => StatusCodes.Status500InternalServerError,
             IamError.InternalServerError => StatusCodes.Status500InternalServerError,
@@ -71,7 +75,7 @@ public static class IamActionResultAssembler
                 controller,
                 ToStatusCodeFromIamError(IamError.UserNotFound),
                 IamError.UserNotFound,
-                errorLocalizer[nameof(IamError.UserNotFound)]
+                errorLocalizer[$"IamError.{nameof(IamError.UserNotFound)}"]
             );
         return successAction(user);
     }

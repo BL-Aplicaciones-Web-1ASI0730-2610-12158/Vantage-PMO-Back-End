@@ -1,14 +1,13 @@
-namespace vantagePMO_platform.Profiles.Interfaces.REST.Resources;
+namespace vantagePMO_platform.Profiles.Interfaces.Acl;
 
 /// <summary>
-///     Output resource (DTO) representing a profile exposed by the REST API.
+///     Cross-context request used to create a profile from another bounded context.
 /// </summary>
-public record ProfileResource(
-    int Id,
+public record CreateProfileRequest(
     string Name,
-    string Role,
-    string? DateOfBirth,
     string Email,
+    string Role,
+    DateOnly? DateOfBirth,
     string Department,
     string Joined,
     string AvatarSeed,

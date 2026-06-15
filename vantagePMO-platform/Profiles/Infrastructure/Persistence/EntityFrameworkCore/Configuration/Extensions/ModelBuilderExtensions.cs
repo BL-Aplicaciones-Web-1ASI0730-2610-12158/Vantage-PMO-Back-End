@@ -2,10 +2,10 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
 
-namespace VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+namespace vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 /// <summary>
 ///     Model builder extensions that configure the Profiles bounded context schema.
@@ -45,6 +45,7 @@ public static class ModelBuilderExtensions
             profile.HasIndex(p => p.Email).IsUnique();
 
             profile.Property(p => p.Role).HasMaxLength(120);
+            profile.Property(p => p.DateOfBirth);
             profile.Property(p => p.Department).HasMaxLength(120);
             profile.Property(p => p.Joined).HasMaxLength(60);
             profile.Property(p => p.AvatarSeed).HasMaxLength(120);

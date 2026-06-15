@@ -1,7 +1,10 @@
+using System.Globalization;
+using Microsoft.Extensions.Localization;
+using vantagePMO_platform.Iam.Domain.Model;
 using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Interfaces.Rest.Resources;
-
-// Added for ArgumentNullException
+using vantagePMO_platform.Shared.Application.Model;
+using vantagePMO_platform.Shared.Resources.Errors;
 
 namespace vantagePMO_platform.Iam.Interfaces.Rest.Transform;
 
@@ -10,21 +13,42 @@ namespace vantagePMO_platform.Iam.Interfaces.Rest.Transform;
 /// </summary>
 public static class SignUpCommandFromResourceAssembler
 {
+    private const string DateOfBirthFormat = "dd/MM/yyyy";
+
     /// <summary>
     ///     Converts a <see cref="SignUpResource" /> to a <see cref="SignUpCommand" />.
     /// </summary>
-    /// <param name="resource">
-    ///     The <see cref="SignUpResource" /> containing the sign-up data. Must not be null.
-    /// </param>
-    /// <returns>
-    ///     A new <see cref="SignUpCommand" /> instance.
-    /// </returns>
-    /// <exception cref="ArgumentNullException">Thrown if the input <paramref name="resource" /> is null.</exception>
-    public static SignUpCommand ToCommandFromResource(SignUpResource resource)
+    public static Result<SignUpCommand> ToCommandFromResource(
+        SignUpResource resource,
+        IStringLocalizer<ErrorMessages> localizer)
     {
-        if (resource == null)
-            throw new ArgumentNullException(nameof(resource),
-                "SignUpResource cannot be null when converting to command.");
-        return new SignUpCommand(resource.Username, resource.Password);
+        ArgumentNullException.ThrowIfNull(resource);
+
+        if (!string.Equals(resource.Password, resource.ConfirmPassword, StringComparison.Ordinal))
+        {
+            return Result<SignUpCommand>.Failure(
+                IamError.PasswordMismatch,
+                localizer[$"IamError.{nameof(IamError.PasswordMismatch)}"]);
+        }
+
+        if (!DateOnly.TryParseExact(
+                resource.DateOfBirth,
+                DateOfBirthFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var dateOfBirth))
+        {
+            return Result<SignUpCommand>.Failure(
+                IamError.InvalidDateOfBirth,
+                localizer[$"IamError.{nameof(IamError.InvalidDateOfBirth)}", DateOfBirthFormat]);
+        }
+
+        return Result<SignUpCommand>.Success(new SignUpCommand(
+            resource.Username.Trim(),
+            resource.Password,
+            resource.FullName.Trim(),
+            resource.Email.Trim(),
+            resource.Role.Trim(),
+            dateOfBirth));
     }
 }

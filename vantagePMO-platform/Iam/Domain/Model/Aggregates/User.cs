@@ -10,37 +10,31 @@ namespace vantagePMO_platform.Iam.Domain.Model.Aggregates;
  *     This class is used to represent a user
  * </remarks>
  */
-public partial class User(string username, string passwordHash)
+public partial class User
 {
-    public User() : this(string.Empty, string.Empty)
+    protected User()
     {
+        Username = string.Empty;
+        PasswordHash = string.Empty;
     }
 
-    public int Id { get; }
-    public string Username { get; private set; } = username;
+    public User(string username, string passwordHash)
+    {
+        Username = username;
+        PasswordHash = passwordHash;
+    }
 
-    [JsonIgnore] public string PasswordHash { get; private set; } = passwordHash;
+    public int Id { get; private set; }
+    public string Username { get; private set; }
 
-    /**
-     * <summary>
-     *     Update the username
-     * </summary>
-     * <param name="username">The new username</param>
-     * <returns>The updated user</returns>
-     */
+    [JsonIgnore] public string PasswordHash { get; private set; }
+
     public User UpdateUsername(string username)
     {
         Username = username;
         return this;
     }
 
-    /**
-     * <summary>
-     *     Update the password hash
-     * </summary>
-     * <param name="passwordHash">The new password hash</param>
-     * <returns>The updated user</returns>
-     */
     public User UpdatePasswordHash(string passwordHash)
     {
         PasswordHash = passwordHash;

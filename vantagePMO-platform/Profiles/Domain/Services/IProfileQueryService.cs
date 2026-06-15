@@ -1,7 +1,7 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.Queries;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Queries;
 
-namespace VantagePMO_platform.Profiles.Domain.Services;
+namespace vantagePMO_platform.Profiles.Domain.Services;
 
 /// <summary>
 ///     Query side of the Profiles bounded context (read operations).

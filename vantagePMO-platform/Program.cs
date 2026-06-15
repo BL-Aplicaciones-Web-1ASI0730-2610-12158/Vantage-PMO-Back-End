@@ -3,16 +3,31 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using VantagePMO_platform.Profiles.Application.Internal.CommandServices;
-using VantagePMO_platform.Profiles.Application.Internal.QueryServices;
-using VantagePMO_platform.Profiles.Domain.Repositories;
-using VantagePMO_platform.Profiles.Domain.Services;
-using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-using VantagePMO_platform.Shared.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+using vantagePMO_platform.Iam.Application.Acl;
+using vantagePMO_platform.Iam.Application.CommandServices;
+using vantagePMO_platform.Iam.Application.Internal.CommandServices;
+using vantagePMO_platform.Iam.Application.Internal.OutboundServices;
+using vantagePMO_platform.Iam.Application.Internal.QueryServices;
+using vantagePMO_platform.Iam.Application.QueryServices;
+using vantagePMO_platform.Iam.Domain.Repositories;
+using vantagePMO_platform.Iam.Infrastructure.Hashing.BCrypt.Services;
+using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Extensions;
+using vantagePMO_platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using vantagePMO_platform.Iam.Infrastructure.Tokens.Jwt.Services;
+using vantagePMO_platform.Iam.Interfaces.Acl;
+using vantagePMO_platform.Profiles.Application.Acl;
+using vantagePMO_platform.Profiles.Application.Internal.CommandServices;
+using vantagePMO_platform.Profiles.Application.Internal.QueryServices;
+using vantagePMO_platform.Profiles.Domain.Repositories;
+using vantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Profiles.Interfaces.Acl;
+using vantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,12 +83,22 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared dependency injection.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<VantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
+builder.Services.AddScoped<vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
 
 // Profiles bounded context dependency injection.
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
+builder.Services.AddScoped<IProfilesContextFacade, ProfilesContextFacade>();
+
+// IAM bounded context dependency injection.
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
 var app = builder.Build();
 
@@ -97,6 +122,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseRequestAuthorization();
 app.UseAuthorization();
 app.MapControllers();
 

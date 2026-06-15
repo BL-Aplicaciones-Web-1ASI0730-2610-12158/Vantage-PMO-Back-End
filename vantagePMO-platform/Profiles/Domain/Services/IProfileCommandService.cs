@@ -1,8 +1,8 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Shared.Application.Model;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Shared.Application.Model;
 
-namespace VantagePMO_platform.Profiles.Domain.Services;
+namespace vantagePMO_platform.Profiles.Domain.Services;
 
 /// <summary>
 ///     Command side of the Profiles bounded context (write operations).
@@ -10,12 +10,12 @@ namespace VantagePMO_platform.Profiles.Domain.Services;
 public interface IProfileCommandService
 {
     /// <summary>
-    ///     Handles the creation of a new profile.
+    ///     Creates a new profile without committing the unit of work.
     /// </summary>
     /// <param name="command">The creation command.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A <see cref="Result{T}" /> wrapping the created profile or a business error.</returns>
-    Task<Result<Profile>> Handle(CreateProfileCommand command, CancellationToken cancellationToken = default);
+    Task<Result<Profile>> CreateProfile(CreateProfileCommand command, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Handles a partial update of an existing profile.

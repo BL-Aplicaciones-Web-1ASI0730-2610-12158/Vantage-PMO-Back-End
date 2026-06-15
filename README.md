@@ -12,7 +12,11 @@ una arquitectura de **monolito modular** con **Bounded Contexts**, capas **DDD**
 
 ## Bounded Contexts
 
-- **Profiles** — gestión de perfiles de usuario (implementado).
+- **Profiles** — gestión de perfiles de usuario.
+- **IAM** — autenticación (sign-up, sign-in) y usuarios.
+
+El registro (`sign-up`) crea en una sola operación la cuenta de usuario y su perfil.
+Después puedes autenticarte con `sign-in` usando el mismo `username` y `password`.
 
 Cada contexto se organiza en capas: `Domain`, `Application`, `Infrastructure`, `Interfaces/REST`.
 La infraestructura compartida (un único `AppDbContext`, repositorios base, Unit of Work,
@@ -127,13 +131,47 @@ curl -s http://localhost:5278/swagger/v1/swagger.json | jq ".paths | keys"
 | `container name "/vantage-mysql" is already in use` | El contenedor ya fue creado antes | Usa `docker start vantage-mysql` en lugar de `docker run` |
 | Swagger devuelve 404 | Entorno distinto de `Development` | Ejecuta con `dotnet run --launch-profile http` |
 
+## Endpoints de autenticación
+
+Base: `http://localhost:5278/api/v1/authentication`
+
+| Método | Ruta                              | Descripción                         | Respuestas        |
+|--------|-----------------------------------|-------------------------------------|-------------------|
+| POST   | `/api/v1/authentication/sign-up`  | Registrar usuario y crear perfil    | 200 / 400 / 409   |
+| POST   | `/api/v1/authentication/sign-in`  | Iniciar sesión (devuelve JWT)       | 200 / 400         |
+
+### Ejemplo sign-up + sign-in
+
+Campos que debe enviar el frontend (`POST /api/v1/authentication/sign-up`):
+
+| Campo en UI           | JSON (camelCase)   | Ejemplo                    |
+|-----------------------|--------------------|----------------------------|
+| Full Name             | `fullName`         | `"Alex Sterling"`          |
+| Username              | `username`         | `"alex.sterling"`          |
+| Role / Position       | `role`             | `"Project Manager"`        |
+| Date of Birth         | `dateOfBirth`      | `"15/03/1990"` (dd/MM/yyyy)|
+| Email Address         | `email`            | `"alex@vantagepmo.io"`       |
+| Password              | `password`         | `"Secret123!"`             |
+| Confirm Password      | `confirmPassword`  | `"Secret123!"`             |
+
+```bash
+# Registrar (crea usuario + perfil)
+curl -s -X POST http://localhost:5278/api/v1/authentication/sign-up \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"Alex Sterling","username":"alex.sterling","role":"Project Manager","dateOfBirth":"15/03/1990","email":"alex.sterling@vantagepmo.io","password":"Secret123!","confirmPassword":"Secret123!"}'
+
+# Iniciar sesión con las mismas credenciales
+curl -s -X POST http://localhost:5278/api/v1/authentication/sign-in \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alex.sterling","password":"Secret123!"}'
+```
+
 ## Endpoints de Profiles
 
 Base: `http://localhost:5278/api/v1/profiles`
 
 | Método | Ruta                         | Descripción                  | Respuestas                  |
 |--------|------------------------------|------------------------------|-----------------------------|
-| POST   | `/api/v1/profiles`           | Crear perfil                 | 201 / 400 / 409             |
 | GET    | `/api/v1/profiles/{id}`      | Obtener por id               | 200 / 404                   |
 | GET    | `/api/v1/profiles?email=`    | Obtener por email            | 200 / 400 / 404             |
 | PATCH  | `/api/v1/profiles/{id}`      | Actualización parcial        | 200 / 400 / 404 / 409       |
@@ -144,11 +182,6 @@ Base: `http://localhost:5278/api/v1/profiles`
 ### Ejemplos con curl
 
 ```bash
-# Crear
-curl -s -X POST http://localhost:5278/api/v1/profiles \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Alex Sterling","email":"alex.sterling@vantagepmo.io","role":"Precision Lead","department":"Executive","joined":"January 2022","avatarSeed":"Alex","bio":["Linea 1"],"certifications":["PMP","SAFe"]}'
-
 # Obtener por id
 curl -s http://localhost:5278/api/v1/profiles/1
 

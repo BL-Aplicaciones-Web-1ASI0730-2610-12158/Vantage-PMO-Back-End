@@ -1,20 +1,20 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+using System.Globalization;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Interfaces.REST.Resources;
 
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Transform;
+namespace vantagePMO_platform.Profiles.Interfaces.REST.Transform;
 
-/// <summary>
-///     Maps a <see cref="Profile" /> aggregate to a <see cref="ProfileResource" />.
-/// </summary>
 public static class ProfileResourceFromEntityAssembler
 {
-    /// <summary>Builds an output resource from the supplied aggregate.</summary>
+    private const string DateOfBirthFormat = "dd/MM/yyyy";
+
     public static ProfileResource ToResourceFromEntity(Profile entity)
     {
         return new ProfileResource(
             entity.Id,
             entity.Name.FullName,
             entity.Role,
+            entity.DateOfBirth?.ToString(DateOfBirthFormat, CultureInfo.InvariantCulture),
             entity.Email.Value,
             entity.Department,
             entity.Joined,

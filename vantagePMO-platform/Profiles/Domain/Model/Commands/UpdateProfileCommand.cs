@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Domain.Model.Commands;
+namespace vantagePMO_platform.Profiles.Domain.Model.Commands;
 
 /// <summary>
 ///     Command carrying a partial set of profile changes (PATCH semantics).
@@ -12,6 +12,7 @@ public record UpdateProfileCommand(
     string? Name,
     string? Email,
     string? Role,
+    DateOnly? DateOfBirth,
     string? Department,
     string? Joined,
     string? AvatarSeed,

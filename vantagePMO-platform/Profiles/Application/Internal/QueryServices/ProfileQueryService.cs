@@ -1,10 +1,10 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.Queries;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
-using VantagePMO_platform.Profiles.Domain.Repositories;
-using VantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Queries;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Profiles.Domain.Repositories;
+using vantagePMO_platform.Profiles.Domain.Services;
 
-namespace VantagePMO_platform.Profiles.Application.Internal.QueryServices;
+namespace vantagePMO_platform.Profiles.Application.Internal.QueryServices;
 
 /// <summary>
 ///     Query service handling the read operations of the Profiles bounded context.

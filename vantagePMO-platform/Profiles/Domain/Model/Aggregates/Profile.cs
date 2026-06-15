@@ -1,8 +1,8 @@
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
-using VantagePMO_platform.Shared.Domain.Model.Entities;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Shared.Domain.Model.Entities;
 
-namespace VantagePMO_platform.Profiles.Domain.Model.Aggregates;
+namespace vantagePMO_platform.Profiles.Domain.Model.Aggregates;
 
 /// <summary>
 ///     Profile aggregate root for the Profiles bounded context.
@@ -31,6 +31,7 @@ public class Profile : IAuditableEntity
         Location = string.Empty;
         YearsActive = string.Empty;
         AvailabilityLabel = string.Empty;
+        DateOfBirth = null;
     }
 
     /// <summary>
@@ -43,6 +44,7 @@ public class Profile : IAuditableEntity
         Name = new PersonName(command.Name);
         Email = new EmailAddress(command.Email);
         Role = command.Role ?? string.Empty;
+        DateOfBirth = command.DateOfBirth;
         Department = command.Department ?? string.Empty;
         Joined = command.Joined ?? string.Empty;
         AvatarSeed = command.AvatarSeed ?? string.Empty;
@@ -69,6 +71,9 @@ public class Profile : IAuditableEntity
 
     /// <summary>Gets the professional role/title.</summary>
     public string Role { get; private set; }
+
+    /// <summary>Gets the profile owner's date of birth.</summary>
+    public DateOnly? DateOfBirth { get; private set; }
 
     /// <summary>Gets the department the owner belongs to.</summary>
     public string Department { get; private set; }
@@ -126,6 +131,7 @@ public class Profile : IAuditableEntity
         if (command.Name is not null) Name = new PersonName(command.Name);
         if (command.Email is not null) Email = new EmailAddress(command.Email);
         if (command.Role is not null) Role = command.Role;
+        if (command.DateOfBirth is not null) DateOfBirth = command.DateOfBirth;
         if (command.Department is not null) Department = command.Department;
         if (command.Joined is not null) Joined = command.Joined;
         if (command.AvatarSeed is not null) AvatarSeed = command.AvatarSeed;

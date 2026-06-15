@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Domain.Model.Commands;
+namespace vantagePMO_platform.Profiles.Domain.Model.Commands;
 
 /// <summary>
 ///     Command carrying all data required to create a new profile.
@@ -7,6 +7,7 @@ public record CreateProfileCommand(
     string Name,
     string Email,
     string Role,
+    DateOnly? DateOfBirth,
     string Department,
     string Joined,
     string AvatarSeed,

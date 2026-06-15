@@ -11,8 +11,8 @@ using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.
 namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260615183929_InitialProfilesSchema")]
-    partial class InitialProfilesSchema
+    [Migration("20260615200000_AddProfileDateOfBirthAndIamUsers")]
+    partial class AddProfileDateOfBirthAndIamUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,10 @@ namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
 
                     b.Property<string>("DeliveryRate")
                         .IsRequired()
@@ -139,6 +143,29 @@ namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .HasDatabaseName("i_x_profiles_email");
 
                     b.ToTable("profiles");
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Iam.Domain.Model.Aggregates.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_users");
+
+                    b.ToTable("users");
                 });
 #pragma warning restore 612, 618
         }

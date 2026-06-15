@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
     public partial class InitialProfilesSchema : Migration

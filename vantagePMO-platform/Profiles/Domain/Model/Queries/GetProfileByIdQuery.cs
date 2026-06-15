@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Domain.Model.Queries;
+namespace vantagePMO_platform.Profiles.Domain.Model.Queries;
 
 /// <summary>
 ///     Query that retrieves a single profile by its identifier.

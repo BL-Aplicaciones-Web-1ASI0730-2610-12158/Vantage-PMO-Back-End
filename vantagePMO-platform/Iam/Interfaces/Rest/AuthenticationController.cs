@@ -4,6 +4,7 @@ using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Iam.Interfaces.Rest.Resources;
 using vantagePMO_platform.Iam.Interfaces.Rest.Transform;
 using vantagePMO_platform.Iam.Resources;
+using vantagePMO_platform.Shared.Application.Model;
 using vantagePMO_platform.Shared.Resources.Errors;
 using vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
@@ -62,9 +63,9 @@ public class AuthenticationController(
 
     /**
      * <summary>
-     *     Sign up endpoint. It allows creating a new user
+     *     Sign up endpoint. It creates a new user account and profile.
      * </summary>
-     * <param name="signUpResource">The sign-up resource containing username and password.</param>
+     * <param name="signUpResource">The sign-up resource containing credentials and profile data.</param>
      * <param name="cancellationToken">The cancellation token.</param>
      * <returns>A confirmation message on successful creation.</returns>
      */
@@ -72,15 +73,26 @@ public class AuthenticationController(
     [AllowAnonymous]
     [SwaggerOperation(
         Summary = "Sign-up",
-        Description = "Sign up a new user",
+        Description = "Sign up a new user and create their profile",
         OperationId = "SignUp")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The user was created successfully")]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "The user was not created")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The user and profile were created successfully")]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "The sign-up data is invalid")]
+    [SwaggerResponse(StatusCodes.Status409Conflict, "The username or email is already taken")]
     public async Task<IActionResult> SignUp([FromBody] SignUpResource signUpResource,
         CancellationToken cancellationToken)
     {
-        var signUpCommand = SignUpCommandFromResourceAssembler.ToCommandFromResource(signUpResource);
-        var result = await userCommandService.Handle(signUpCommand, cancellationToken);
+        var commandResult = SignUpCommandFromResourceAssembler.ToCommandFromResource(signUpResource, errorLocalizer);
+        if (commandResult.IsFailure)
+        {
+            return IamActionResultAssembler.ToActionResultFromSignUpResult(
+                this,
+                Result.Failure(commandResult.Error!, commandResult.Message),
+                errorLocalizer,
+                problemDetailsFactory,
+                () => Ok());
+        }
+
+        var result = await userCommandService.Handle(commandResult.Value!, cancellationToken);
 
         return IamActionResultAssembler.ToActionResultFromSignUpResult(
             this,

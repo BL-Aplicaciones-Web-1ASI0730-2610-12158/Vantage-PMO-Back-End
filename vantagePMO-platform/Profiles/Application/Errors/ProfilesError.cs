@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Application.Errors;
+namespace vantagePMO_platform.Profiles.Application.Errors;
 
 /// <summary>
 ///     Business errors for the Profiles bounded context.
