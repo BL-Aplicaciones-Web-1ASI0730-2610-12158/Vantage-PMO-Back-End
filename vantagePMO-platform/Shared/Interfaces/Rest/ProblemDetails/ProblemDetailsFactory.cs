@@ -35,11 +35,16 @@ public class ProblemDetailsFactory
         Enum? errorEnum, // The specific error enum (IamError, ProfilesError, etc.)
         string detailMessage) // The localized message from the application service
     {
+        // Error resx keys are qualified with the enum type name (e.g. "ProfilesError.ProfileNotFound").
+        var title = errorEnum != null
+            ? _errorLocalizer[$"{errorEnum.GetType().Name}.{errorEnum}"]
+            : _commonLocalizer["GenericError"];
+
         // Leverage the base ProblemDetailsFactory for initial creation
         var problemDetails = _aspNetCoreProblemDetailsFactory.CreateProblemDetails( // Corrected usage
             controller.HttpContext,
             statusCode,
-            errorEnum != null ? _errorLocalizer[$"{errorEnum}"] : _commonLocalizer["GenericError"],
+            title,
             detail: detailMessage
         );
 
@@ -49,15 +54,14 @@ public class ProblemDetailsFactory
             problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
             {
                 Status = statusCode,
-                Title = errorEnum != null ? _errorLocalizer[$"{errorEnum}"] : _commonLocalizer["GenericError"],
+                Title = title,
                 Detail = detailMessage,
                 Instance = controller.HttpContext.Request.Path
             };
         }
         else
         {
-            problemDetails.Title =
-                errorEnum != null ? _errorLocalizer[$"{errorEnum}"] : _commonLocalizer["GenericError"];
+            problemDetails.Title = title;
             problemDetails.Detail = detailMessage;
             problemDetails.Instance = controller.HttpContext.Request.Path;
         }

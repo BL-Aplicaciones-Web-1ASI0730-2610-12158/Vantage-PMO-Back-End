@@ -1,6 +1,48 @@
 @vantagePMO_platform_HostAddress = http://localhost:5278
 
-GET {{vantagePMO_platform_HostAddress}}/weatherforecast/
+### Create a profile (201 Created, 409 if email duplicated, 400 if invalid)
+POST {{vantagePMO_platform_HostAddress}}/api/v1/profiles
+Content-Type: application/json
+Accept-Language: es
+
+{
+  "name": "Alex Sterling",
+  "email": "alex.sterling@vantagepmo.io",
+  "role": "Precision Lead",
+  "department": "Executive",
+  "joined": "January 2022",
+  "avatarSeed": "Alex",
+  "availability": "AVAILABLE FOR CONSULT",
+  "experience": "8+ Years",
+  "deliveryRate": "95%",
+  "activeBudget": "$2.8M",
+  "bio": [
+    "Alex Sterling is a Precision Lead specializing in portfolio management.",
+    "Delivers complex projects on schedule with strategic oversight."
+  ],
+  "certifications": ["PMP Certified", "SAFe Agilist", "CSM"],
+  "skillsDescription": "Aligns stakeholder expectations with delivery timelines.",
+  "location": "New York, US",
+  "yearsActive": "4 Years at Vantage PMO",
+  "availabilityLabel": "Accepting New Leads"
+}
+
+### Get a profile by id (200 OK, 404 if not found)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profiles/1
 Accept: application/json
+
+### Get a profile by email (200 OK, 400 if missing param, 404 if not found)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profiles?email=alex.sterling@vantagepmo.io
+Accept: application/json
+
+### Partially update a profile (200 OK, 404 if not found, 409 if email duplicated)
+PATCH {{vantagePMO_platform_HostAddress}}/api/v1/profiles/1
+Content-Type: application/json
+
+{
+  "role": "Senior Precision Lead",
+  "availabilityLabel": "Fully Booked",
+  "certifications": ["PMP Certified", "SAFe Agilist", "CSM", "PMI-ACP"]
+}
 
 ###
