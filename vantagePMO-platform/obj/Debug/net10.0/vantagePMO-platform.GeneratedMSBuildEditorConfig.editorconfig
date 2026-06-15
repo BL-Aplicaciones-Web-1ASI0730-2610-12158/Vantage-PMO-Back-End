@@ -30,3 +30,15 @@ build_property.MSBuildProjectDirectory = /Users/mauricioteranzavala/RiderProject
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
+
+[/Users/mauricioteranzavala/RiderProjects/vantagePMO-platform/vantagePMO-platform/Shared/Resources/CommonMessages.resx]
+build_metadata.AdditionalFiles.TargetPath = Shared/Resources/CommonMessages.resx
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/mauricioteranzavala/RiderProjects/vantagePMO-platform/vantagePMO-platform/Shared/Resources/Errors/ErrorMessages.resx]
+build_metadata.AdditionalFiles.TargetPath = Shared/Resources/Errors/ErrorMessages.resx
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/mauricioteranzavala/RiderProjects/vantagePMO-platform/vantagePMO-platform/Shared/Resources/Errors/ErrorMessages.es.resx]
+build_metadata.AdditionalFiles.TargetPath = Shared/Resources/Errors/ErrorMessages.es.resx
+build_metadata.AdditionalFiles.CssScope = 
