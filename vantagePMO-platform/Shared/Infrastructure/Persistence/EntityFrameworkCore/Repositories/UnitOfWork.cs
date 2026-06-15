@@ -1,7 +1,7 @@
-using VantagePMO_platform.Shared.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
 ///     Unit of work for the application.

@@ -1,8 +1,8 @@
-using VantagePMO_platform.Shared.Domain.Model.Entities;
+using vantagePMO_platform.Shared.Domain.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 
 /// <summary>
 ///     EF Core interceptor that automatically populates audit timestamps on any entity
