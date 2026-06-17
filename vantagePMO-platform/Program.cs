@@ -28,6 +28,11 @@ using vantagePMO_platform.Projects.Application.Internal.QueryServices;
 using vantagePMO_platform.Projects.Domain.Repositories;
 using vantagePMO_platform.Projects.Domain.Services;
 using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Dashboard.Application.Internal.CommandServices;
+using vantagePMO_platform.Dashboard.Application.Internal.QueryServices;
+using vantagePMO_platform.Dashboard.Domain.Repositories;
+using vantagePMO_platform.Dashboard.Domain.Services;
+using vantagePMO_platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -109,6 +114,15 @@ builder.Services.AddScoped<IProjectCommandService, ProjectCommandService>();
 builder.Services.AddScoped<IProjectQueryService, ProjectQueryService>();
 builder.Services.AddScoped<ProjectsSampleDataSeeder>();
 
+// Dashboard bounded context dependency injection.
+builder.Services.AddScoped<IDashboardTaskRepository, DashboardTaskRepository>();
+builder.Services.AddScoped<IScheduleItemRepository, ScheduleItemRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDashboardTaskQueryService, DashboardTaskQueryService>();
+builder.Services.AddScoped<IScheduleItemQueryService, ScheduleItemQueryService>();
+builder.Services.AddScoped<IDepartmentQueryService, DepartmentQueryService>();
+builder.Services.AddScoped<DashboardSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -128,6 +142,9 @@ using (var scope = app.Services.CreateScope())
 
     var projectsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ProjectsSampleDataSeeder>();
     await projectsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var dashboardSampleDataSeeder = scope.ServiceProvider.GetRequiredService<DashboardSampleDataSeeder>();
+    await dashboardSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

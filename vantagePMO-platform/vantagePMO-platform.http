@@ -118,4 +118,20 @@ Content-Type: application/json
   ]
 }
 
+### Dashboard — priority tasks
+GET {{vantagePMO_platform_HostAddress}}/api/v1/tasks
+Accept: application/json
+
+### Dashboard — schedule
+GET {{vantagePMO_platform_HostAddress}}/api/v1/schedule
+Accept: application/json
+
+### Dashboard — departments
+GET {{vantagePMO_platform_HostAddress}}/api/v1/departments
+Accept: application/json
+
+### Dashboard — portfolio stats (no userId)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats
+Accept: application/json
+
 ###
