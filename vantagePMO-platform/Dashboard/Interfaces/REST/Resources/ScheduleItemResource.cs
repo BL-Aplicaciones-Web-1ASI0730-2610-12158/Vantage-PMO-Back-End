@@ -1,0 +1,11 @@
+namespace vantagePMO_platform.Dashboard.Interfaces.REST.Resources;
+
+public record ScheduleItemResource(
+    int Id,
+    string Date,
+    string Time,
+    int Duration,
+    string Title,
+    string Detail,
+    string Type,
+    bool Active);

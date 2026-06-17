@@ -12,4 +12,11 @@ public class ProfileStatsQueryService(IProfileStatsRepository profileStatsReposi
     {
         return await profileStatsRepository.FindByUserIdAsync(query.UserId, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Domain.Model.Aggregates.ProfileStats>> Handle(
+        GetAllProfileStatsQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        return await profileStatsRepository.ListOrderedAsync(cancellationToken);
+    }
 }

@@ -13,6 +13,18 @@ public class ProfileStatsRepository(AppDbContext context) : IProfileStatsReposit
             .FirstOrDefaultAsync(stats => stats.UserId == userId, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ProfileStats>> ListOrderedAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.Set<ProfileStats>()
+            .OrderBy(stats => stats.Id)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.Set<ProfileStats>().AnyAsync(cancellationToken);
+    }
+
     public async Task AddAsync(ProfileStats stats, CancellationToken cancellationToken = default)
     {
         await context.Set<ProfileStats>().AddAsync(stats, cancellationToken);
