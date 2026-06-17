@@ -23,6 +23,11 @@ using vantagePMO_platform.Profiles.Domain.Repositories;
 using vantagePMO_platform.Profiles.Domain.Services;
 using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Profiles.Interfaces.Acl;
+using vantagePMO_platform.Projects.Application.Internal.CommandServices;
+using vantagePMO_platform.Projects.Application.Internal.QueryServices;
+using vantagePMO_platform.Projects.Domain.Repositories;
+using vantagePMO_platform.Projects.Domain.Services;
+using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -98,6 +103,12 @@ builder.Services.AddScoped<IEndorsementQueryService, EndorsementQueryService>();
 builder.Services.AddScoped<ProfileRelatedDataSeeder>();
 builder.Services.AddScoped<IProfilesContextFacade, ProfilesContextFacade>();
 
+// Projects bounded context dependency injection.
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectCommandService, ProjectCommandService>();
+builder.Services.AddScoped<IProjectQueryService, ProjectQueryService>();
+builder.Services.AddScoped<ProjectsSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -114,6 +125,9 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
+
+    var projectsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ProjectsSampleDataSeeder>();
+    await projectsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

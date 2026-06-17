@@ -71,4 +71,51 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/endorsements?userId=1
 Accept: application/json
 
+### Get all projects
+GET {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Accept: application/json
+
+### Create a project
+POST {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Mixed-use development with retail, residential, and office components.",
+  "status": "healthy",
+  "progress": 0,
+  "startDate": "2026-01-15",
+  "dueDate": "2026-12-31",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" }
+  ],
+  "milestones": []
+}
+
+### Update a project
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/projects/1
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Updated mixed-use development scope.",
+  "status": "at-risk",
+  "progress": 64,
+  "startDate": "2026-01-15",
+  "dueDate": "Delayed: Supply",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" },
+    { "id": 2, "name": "Benjamin", "avatar": "B" }
+  ],
+  "milestones": [
+    { "id": 1, "name": "Final Audit Submission", "date": "Oct 14", "type": "warning" }
+  ]
+}
+
 ###

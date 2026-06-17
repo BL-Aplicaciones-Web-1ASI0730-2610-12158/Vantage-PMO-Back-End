@@ -1,4 +1,5 @@
 using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // Profiles Context
         builder.ApplyProfilesConfiguration();
+
+        // Projects Context
+        builder.ApplyProjectsConfiguration();
 
         // IAM Context
         builder.ApplyIamConfiguration();
