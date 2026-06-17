@@ -46,6 +46,13 @@ public class ProfileCommandService(
                     localizer["ProfilesError.EmailAlreadyRegistered", profile.Email.Value]);
             }
 
+            if (await profileRepository.FindByUserIdAsync(command.UserId, cancellationToken) is not null)
+            {
+                return Result<Profile>.Failure(
+                    ProfilesError.InvalidProfileData,
+                    localizer["ProfilesError.InvalidProfileData"]);
+            }
+
             await profileRepository.AddAsync(profile, cancellationToken);
 
             logger.LogInformation("Profile {ProfileId} staged for creation.", profile.Id);

@@ -41,6 +41,7 @@ public class Profile : IAuditableEntity
     /// <exception cref="ArgumentException">Thrown when name/email value objects are invalid.</exception>
     public Profile(CreateProfileCommand command)
     {
+        UserId = command.UserId;
         Name = new PersonName(command.Name);
         Email = new EmailAddress(command.Email);
         Role = command.Role ?? string.Empty;
@@ -62,6 +63,9 @@ public class Profile : IAuditableEntity
 
     /// <summary>Gets the profile identifier.</summary>
     public int Id { get; }
+
+    /// <summary>Gets the IAM user identifier this profile belongs to.</summary>
+    public int UserId { get; private set; }
 
     /// <summary>Gets the profile owner's full name.</summary>
     public PersonName Name { get; private set; }

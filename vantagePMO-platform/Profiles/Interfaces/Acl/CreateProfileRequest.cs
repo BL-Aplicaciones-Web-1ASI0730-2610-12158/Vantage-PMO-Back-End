@@ -4,6 +4,7 @@ namespace vantagePMO_platform.Profiles.Interfaces.Acl;
 ///     Cross-context request used to create a profile from another bounded context.
 /// </summary>
 public record CreateProfileRequest(
+    int UserId,
     string Name,
     string Email,
     string Role,

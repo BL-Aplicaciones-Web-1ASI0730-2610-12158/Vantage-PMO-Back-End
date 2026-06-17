@@ -44,6 +44,9 @@ public static class ModelBuilderExtensions
 
             profile.HasIndex(p => p.Email).IsUnique();
 
+            profile.Property(p => p.UserId).IsRequired();
+            profile.HasIndex(p => p.UserId).IsUnique();
+
             profile.Property(p => p.Role).HasMaxLength(120);
             profile.Property(p => p.DateOfBirth);
             profile.Property(p => p.Department).HasMaxLength(120);
@@ -65,6 +68,37 @@ public static class ModelBuilderExtensions
             profile.Property(p => p.Certifications)
                 .HasConversion(stringListConverter)
                 .Metadata.SetValueComparer(stringListComparer);
+        });
+
+        builder.Entity<ProfileStats>(stats =>
+        {
+            stats.HasKey(entity => entity.Id);
+            stats.Property(entity => entity.Id).ValueGeneratedOnAdd();
+            stats.Property(entity => entity.UserId).IsRequired();
+            stats.HasIndex(entity => entity.UserId).IsUnique();
+            stats.Property(entity => entity.PortfolioHealth).HasMaxLength(60);
+        });
+
+        builder.Entity<ProfileSkill>(skill =>
+        {
+            skill.HasKey(entity => entity.Id);
+            skill.Property(entity => entity.Id).ValueGeneratedOnAdd();
+            skill.Property(entity => entity.UserId).IsRequired();
+            skill.Property(entity => entity.Name).HasMaxLength(120).IsRequired();
+            skill.Property(entity => entity.Percentage).IsRequired();
+            skill.HasIndex(entity => entity.UserId);
+        });
+
+        builder.Entity<Endorsement>(endorsement =>
+        {
+            endorsement.HasKey(entity => entity.Id);
+            endorsement.Property(entity => entity.Id).ValueGeneratedOnAdd();
+            endorsement.Property(entity => entity.UserId).IsRequired();
+            endorsement.Property(entity => entity.Quote).HasMaxLength(1000).IsRequired();
+            endorsement.Property(entity => entity.AuthorName).HasMaxLength(120).IsRequired();
+            endorsement.Property(entity => entity.AuthorRole).HasMaxLength(120).IsRequired();
+            endorsement.Property(entity => entity.AuthorAvatarSeed).HasMaxLength(120).IsRequired();
+            endorsement.HasIndex(entity => entity.UserId);
         });
     }
 }

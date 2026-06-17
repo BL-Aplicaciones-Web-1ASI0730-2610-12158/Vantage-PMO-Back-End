@@ -87,8 +87,15 @@ builder.Services.AddScoped<vantagePMO_platform.Shared.Interfaces.Rest.ProblemDet
 
 // Profiles bounded context dependency injection.
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileStatsRepository, ProfileStatsRepository>();
+builder.Services.AddScoped<IProfileSkillRepository, ProfileSkillRepository>();
+builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
 builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
+builder.Services.AddScoped<IProfileStatsQueryService, ProfileStatsQueryService>();
+builder.Services.AddScoped<IProfileSkillQueryService, ProfileSkillQueryService>();
+builder.Services.AddScoped<IEndorsementQueryService, EndorsementQueryService>();
+builder.Services.AddScoped<ProfileRelatedDataSeeder>();
 builder.Services.AddScoped<IProfilesContextFacade, ProfilesContextFacade>();
 
 // IAM bounded context dependency injection.

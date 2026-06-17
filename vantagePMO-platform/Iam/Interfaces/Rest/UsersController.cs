@@ -1,17 +1,23 @@
+using System.Globalization;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Swashbuckle.AspNetCore.Annotations;
 using vantagePMO_platform.Iam.Application.QueryServices;
 using vantagePMO_platform.Iam.Domain.Model.Queries;
 using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Iam.Interfaces.Rest.Resources;
 using vantagePMO_platform.Iam.Interfaces.Rest.Transform;
-using vantagePMO_platform.Shared.Resources.Errors;
+using vantagePMO_platform.Profiles.Application.Errors;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Profiles.Domain.Model.Queries;
+using vantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Interfaces.REST.Resources;
+using vantagePMO_platform.Profiles.Interfaces.REST.Transform;
+using vantagePMO_platform.Shared.Application.Model;
 using vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Swashbuckle.AspNetCore.Annotations;
-// For ProblemDetailsFactory
-
-// For IamError enum
+using vantagePMO_platform.Shared.Resources.Errors;
 
 namespace vantagePMO_platform.Iam.Interfaces.Rest;
 
@@ -19,62 +25,123 @@ namespace vantagePMO_platform.Iam.Interfaces.Rest;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-[SwaggerTag("Available User endpoints")]
+[SwaggerTag("User and profile endpoints")]
 public class UsersController(
     IUserQueryService userQueryService,
-    IStringLocalizer<ErrorMessages> errorLocalizer, // Renamed for clarity
-    ProblemDetailsFactory problemDetailsFactory) // Inject ProblemDetailsFactory
-    : ControllerBase
+    IProfileQueryService profileQueryService,
+    IProfileCommandService profileCommandService,
+    IStringLocalizer<ErrorMessages> errorLocalizer,
+    ProblemDetailsFactory problemDetailsFactory,
+    ILogger<UsersController> logger) : ControllerBase
 {
-    private readonly IStringLocalizer<ErrorMessages> _errorLocalizer = errorLocalizer;
-    private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
-
-    /**
-     * <summary>
-     *     Get user by id endpoint. It allows to get a user by id
-     * </summary>
-     * <param name="id">The user id</param>
-     * <param name="cancellationToken">The cancellation token.</param>
-     * <returns>The user resource</returns>
-     */
-    [HttpGet("{id}")]
-    [SwaggerOperation(
-        Summary = "Get a user by its id",
-        Description = "Get a user by its id",
-        OperationId = "GetUserById")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The user was found", typeof(UserResource))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "The user was not found")]
-    public async Task<IActionResult> GetUserById(int id, CancellationToken cancellationToken)
+    /// <summary>
+    ///     Returns the profile for the given user id. Matches the frontend <c>/users/{id}</c> contract.
+    /// </summary>
+    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Get profile by user id", OperationId = "GetProfileByUserId")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The profile was found.", typeof(ProfileResource))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The profile does not exist.")]
+    public async Task<IActionResult> GetProfileByUserId(int id, CancellationToken cancellationToken)
     {
-        var getUserByIdQuery = new GetUserByIdQuery(id);
-        var user = await userQueryService.Handle(getUserByIdQuery, cancellationToken);
+        var profile = await profileQueryService.Handle(new GetProfileByUserIdQuery(id), cancellationToken);
+        if (profile is null)
+        {
+            return problemDetailsFactory.CreateProblemDetails(
+                this,
+                StatusCodes.Status404NotFound,
+                ProfilesError.ProfileNotFound,
+                errorLocalizer["ProfilesError.ProfileNotFound"]);
+        }
 
-        return IamActionResultAssembler.ToActionResultFromGetUserByIdResult(
-            this,
-            user,
-            _errorLocalizer,
-            _problemDetailsFactory,
-            foundUser => Ok(UserResourceFromEntityAssembler.ToResourceFromEntity(foundUser))
-        );
+        return Ok(ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile, exposeUserId: true));
     }
 
-    /**
-     * <summary>
-     *     Get all users' endpoint. It allows getting all users
-     * </summary>
-     * <returns>The user resources</returns>
-     */
+    /// <summary>
+    ///     Returns profiles filtered by email, or all IAM users when no email is supplied.
+    /// </summary>
     [HttpGet]
-    [SwaggerOperation(
-        Summary = "Get all users",
-        Description = "Get all users",
-        OperationId = "GetAllUsers")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The users were found", typeof(IEnumerable<UserResource>))]
-    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Get profiles by email or list IAM users", OperationId = "GetUsersOrProfiles")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Resources were found.")]
+    public async Task<IActionResult> GetUsers(
+        [FromQuery] string? email,
+        CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            var profile = await profileQueryService.Handle(new GetProfileByEmailQuery(email), cancellationToken);
+            if (profile is null)
+                return Ok(Array.Empty<ProfileResource>());
+
+            return Ok(new[] { ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile, exposeUserId: true) });
+        }
+
         var getAllUsersQuery = new GetAllUsersQuery();
         var users = await userQueryService.Handle(getAllUsersQuery, cancellationToken);
         var userResources = users.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(userResources);
+    }
+
+    /// <summary>
+    ///     Partially updates the profile linked to the given user id.
+    /// </summary>
+    [HttpPatch("{id:int}")]
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Update profile by user id", OperationId = "UpdateProfileByUserId")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The profile was updated.", typeof(ProfileResource))]
+    public async Task<IActionResult> UpdateProfileByUserId(
+        int id,
+        [FromBody] UpdateProfileResource resource,
+        CancellationToken cancellationToken)
+    {
+        var profile = await profileQueryService.Handle(new GetProfileByUserIdQuery(id), cancellationToken);
+        if (profile is null)
+        {
+            return problemDetailsFactory.CreateProblemDetails(
+                this,
+                StatusCodes.Status404NotFound,
+                ProfilesError.ProfileNotFound,
+                errorLocalizer["ProfilesError.ProfileNotFound"]);
+        }
+
+        UpdateProfileCommand command;
+        try
+        {
+            command = UpdateProfileCommandFromResourceAssembler.ToCommandFromResource(profile.Id, resource);
+        }
+        catch (ArgumentException)
+        {
+            return problemDetailsFactory.CreateProblemDetails(
+                this,
+                StatusCodes.Status400BadRequest,
+                ProfilesError.InvalidProfileData,
+                errorLocalizer["ProfilesError.InvalidProfileData"]);
+        }
+
+        var result = await profileCommandService.Handle(command, cancellationToken);
+        if (result.IsSuccess)
+            return Ok(ProfileResourceFromEntityAssembler.ToResourceFromEntity(result.Value!, exposeUserId: true));
+
+        return MapErrorToActionResult(result);
+    }
+
+    private IActionResult MapErrorToActionResult(Result<Profile> result)
+    {
+        var error = result.Error as ProfilesError?;
+        var statusCode = error switch
+        {
+            ProfilesError.EmailAlreadyRegistered => StatusCodes.Status409Conflict,
+            ProfilesError.ProfileNotFound => StatusCodes.Status404NotFound,
+            ProfilesError.InvalidProfileData => StatusCodes.Status400BadRequest,
+            ProfilesError.OperationCancelled => StatusCodes.Status400BadRequest,
+            ProfilesError.DatabaseError => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        if (statusCode == StatusCodes.Status500InternalServerError)
+            logger.LogError("Profile operation failed: {Message}", result.Message);
+
+        return problemDetailsFactory.CreateProblemDetails(this, statusCode, result.Error, result.Message);
     }
 }

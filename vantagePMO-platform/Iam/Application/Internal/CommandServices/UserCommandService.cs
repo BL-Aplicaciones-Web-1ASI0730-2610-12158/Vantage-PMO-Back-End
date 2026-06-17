@@ -1,3 +1,4 @@
+using System.Globalization;
 using vantagePMO_platform.Iam.Application.CommandServices;
 using vantagePMO_platform.Iam.Application.Internal.OutboundServices;
 using vantagePMO_platform.Iam.Domain.Model;
@@ -5,6 +6,7 @@ using vantagePMO_platform.Iam.Domain.Model.Aggregates;
 using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Domain.Repositories;
 using vantagePMO_platform.Profiles.Application.Errors;
+using vantagePMO_platform.Profiles.Application.Internal.CommandServices;
 using vantagePMO_platform.Profiles.Interfaces.Acl;
 using vantagePMO_platform.Shared.Application.Model;
 using vantagePMO_platform.Shared.Domain.Repositories;
@@ -19,6 +21,7 @@ public class UserCommandService(
     ITokenService tokenService,
     IHashingService hashingService,
     IProfilesContextFacade profilesContextFacade,
+    ProfileRelatedDataSeeder profileRelatedDataSeeder,
     IUnitOfWork unitOfWork,
     IStringLocalizer<ErrorMessages> localizer)
     : IUserCommandService
@@ -50,31 +53,42 @@ public class UserCommandService(
         try
         {
             await userRepository.AddAsync(user, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            var firstName = command.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()
+                            ?? command.FullName;
+            var joined = DateTime.UtcNow.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
 
             var profileResult = await profilesContextFacade.CreateProfile(
                 new CreateProfileRequest(
+                    user.Id,
                     command.FullName,
                     command.Email,
                     command.Role,
                     command.DateOfBirth,
                     string.Empty,
+                    joined,
+                    firstName,
+                    "AVAILABLE FOR CONSULT",
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    string.Empty,
-                    string.Empty,
-                    string.Empty,
+                    new[] { $"Professional at Vantage PMO with a focus on {command.Role}." },
                     Array.Empty<string>(),
-                    Array.Empty<string>(),
                     string.Empty,
                     string.Empty,
                     string.Empty,
-                    string.Empty),
+                    "Accepting New Leads"),
                 cancellationToken);
 
             if (profileResult.IsFailure)
+            {
+                userRepository.Remove(user);
+                await unitOfWork.CompleteAsync(cancellationToken);
                 return MapProfileErrorToSignUpResult(profileResult);
+            }
 
+            await profileRelatedDataSeeder.SeedDefaultsAsync(user.Id, command.FullName, cancellationToken);
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result.Success();
         }

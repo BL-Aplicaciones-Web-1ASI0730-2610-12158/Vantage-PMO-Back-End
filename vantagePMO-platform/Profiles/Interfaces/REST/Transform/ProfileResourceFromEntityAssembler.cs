@@ -8,10 +8,10 @@ public static class ProfileResourceFromEntityAssembler
 {
     private const string DateOfBirthFormat = "dd/MM/yyyy";
 
-    public static ProfileResource ToResourceFromEntity(Profile entity)
+    public static ProfileResource ToResourceFromEntity(Profile entity, bool exposeUserId = false)
     {
         return new ProfileResource(
-            entity.Id,
+            exposeUserId ? entity.UserId : entity.Id,
             entity.Name.FullName,
             entity.Role,
             entity.DateOfBirth?.ToString(DateOfBirthFormat, CultureInfo.InvariantCulture),

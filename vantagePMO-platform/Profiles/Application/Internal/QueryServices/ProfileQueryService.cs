@@ -32,4 +32,10 @@ public class ProfileQueryService(IProfileRepository profileRepository) : IProfil
 
         return await profileRepository.FindByEmailAsync(email, cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<Profile?> Handle(GetProfileByUserIdQuery query, CancellationToken cancellationToken = default)
+    {
+        return await profileRepository.FindByUserIdAsync(query.UserId, cancellationToken);
+    }
 }

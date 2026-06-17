@@ -41,4 +41,34 @@ Content-Type: application/json
   "availabilityLabel": "Fully Booked"
 }
 
+### Frontend contract — get profile by user id
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Accept: application/json
+
+### Frontend contract — get profile by email (returns array)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users?email=alex.sterling@vantagepmo.io
+Accept: application/json
+
+### Frontend contract — update profile by user id
+PATCH {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Content-Type: application/json
+
+{
+  "role": "Senior Project Manager",
+  "location": "London, UK",
+  "bio": ["Updated biography paragraph."]
+}
+
+### Frontend contract — profile stats
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats?userId=1
+Accept: application/json
+
+### Frontend contract — profile skills
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profile-skills?userId=1
+Accept: application/json
+
+### Frontend contract — endorsements
+GET {{vantagePMO_platform_HostAddress}}/api/v1/endorsements?userId=1
+Accept: application/json
+
 ###

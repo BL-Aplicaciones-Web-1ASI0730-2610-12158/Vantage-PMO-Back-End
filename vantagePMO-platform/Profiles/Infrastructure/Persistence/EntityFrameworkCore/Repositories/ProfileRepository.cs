@@ -26,4 +26,11 @@ public class ProfileRepository(AppDbContext context)
         return await Context.Set<Profile>()
             .AnyAsync(profile => profile.Email == email, cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<Profile?> FindByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<Profile>()
+            .FirstOrDefaultAsync(profile => profile.UserId == userId, cancellationToken);
+    }
 }
