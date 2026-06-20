@@ -134,4 +134,24 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/stats
 Accept: application/json
 
+### Chat Hub — users
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-users
+Accept: application/json
+
+### Chat Hub — chats
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chats
+Accept: application/json
+
+### Chat Hub — messages
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-messages
+Accept: application/json
+
+### Chat Hub — pinned assets
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-pinned-assets?chatId=pmo-strategic-alignment
+Accept: application/json
+
+### Chat Hub — insights
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-insights?chatId=pmo-strategic-alignment
+Accept: application/json
+
 ###
