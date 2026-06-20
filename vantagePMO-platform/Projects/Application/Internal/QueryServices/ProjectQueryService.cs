@@ -1,7 +1,7 @@
 using vantagePMO_platform.Projects.Domain.Model.Aggregates;
 using vantagePMO_platform.Projects.Domain.Model.Queries;
 using vantagePMO_platform.Projects.Domain.Repositories;
-using vantagePMO_platform.Projects.Domain.Services;
+using vantagePMO_platform.Projects.Application.QueryServices;
 
 namespace vantagePMO_platform.Projects.Application.Internal.QueryServices;
 

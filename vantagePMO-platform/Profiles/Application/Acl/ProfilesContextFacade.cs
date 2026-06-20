@@ -1,5 +1,5 @@
 using vantagePMO_platform.Profiles.Domain.Model.Commands;
-using vantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Application.CommandServices;
 using vantagePMO_platform.Profiles.Interfaces.Acl;
 using vantagePMO_platform.Shared.Application.Model;
 

@@ -5,7 +5,7 @@ using vantagePMO_platform.Iam.Domain.Model;
 using vantagePMO_platform.Iam.Domain.Model.Aggregates;
 using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Domain.Repositories;
-using vantagePMO_platform.Profiles.Application.Errors;
+using vantagePMO_platform.Profiles.Domain.Model;
 using vantagePMO_platform.Profiles.Application.Internal.CommandServices;
 using vantagePMO_platform.Profiles.Interfaces.Acl;
 using vantagePMO_platform.Shared.Application.Model;

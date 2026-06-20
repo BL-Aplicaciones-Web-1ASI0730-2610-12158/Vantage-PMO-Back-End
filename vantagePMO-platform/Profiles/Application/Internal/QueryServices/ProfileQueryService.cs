@@ -2,7 +2,7 @@ using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
 using vantagePMO_platform.Profiles.Domain.Model.Queries;
 using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
 using vantagePMO_platform.Profiles.Domain.Repositories;
-using vantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Application.QueryServices;
 
 namespace vantagePMO_platform.Profiles.Application.Internal.QueryServices;
 

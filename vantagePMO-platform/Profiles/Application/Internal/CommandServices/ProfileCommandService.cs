@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using vantagePMO_platform.Profiles.Application.Errors;
+using vantagePMO_platform.Profiles.Domain.Model;
 using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
 using vantagePMO_platform.Profiles.Domain.Model.Commands;
 using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
 using vantagePMO_platform.Profiles.Domain.Repositories;
-using vantagePMO_platform.Profiles.Domain.Services;
+using vantagePMO_platform.Profiles.Application.CommandServices;
 using vantagePMO_platform.Shared.Application.Model;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Resources.Errors;

@@ -1,6 +1,6 @@
 using vantagePMO_platform.Dashboard.Domain.Model.Queries;
 using vantagePMO_platform.Dashboard.Domain.Repositories;
-using vantagePMO_platform.Dashboard.Domain.Services;
+using vantagePMO_platform.Dashboard.Application.QueryServices;
 
 namespace vantagePMO_platform.Dashboard.Application.Internal.QueryServices;
 
