@@ -75,6 +75,25 @@
     <value>Ocurrió un error interno inesperado en Proyectos.</value>
   </data>
 
+    <data name="ChatHubError.ChatNotFound" xml:space="preserve">
+    <value>Chat no encontrado.</value>
+  </data>
+    <data name="ChatHubError.InvalidChatData" xml:space="preserve">
+    <value>Datos de chat inválidos proporcionados.</value>
+  </data>
+    <data name="ChatHubError.InvalidMessageData" xml:space="preserve">
+    <value>Datos de mensaje de chat inválidos proporcionados.</value>
+  </data>
+    <data name="ChatHubError.OperationCancelled" xml:space="preserve">
+    <value>La operación de Chat Hub fue cancelada.</value>
+  </data>
+    <data name="ChatHubError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de Chat Hub.</value>
+  </data>
+    <data name="ChatHubError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Chat Hub.</value>
+  </data>
+
     <data name="PublishingError.CategoryNotFound" xml:space="preserve">
     <value>Categoría no encontrada.</value>
   </data>
