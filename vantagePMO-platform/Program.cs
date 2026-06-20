@@ -8,6 +8,12 @@ using VantagePMO_platform.Profiles.Application.Internal.QueryServices;
 using VantagePMO_platform.Profiles.Domain.Repositories;
 using VantagePMO_platform.Profiles.Domain.Services;
 using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.ChatHub.Application.CommandServices;
+using vantagePMO_platform.ChatHub.Application.Internal.CommandServices;
+using vantagePMO_platform.ChatHub.Application.Internal.QueryServices;
+using vantagePMO_platform.ChatHub.Application.QueryServices;
+using vantagePMO_platform.ChatHub.Domain.Repositories;
+using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using VantagePMO_platform.Shared.Domain.Repositories;
 using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -75,6 +81,21 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
 
+// Chat Hub bounded context dependency injection.
+builder.Services.AddScoped<IChatUserRepository, ChatUserRepository>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+builder.Services.AddScoped<IChatPinnedAssetRepository, ChatPinnedAssetRepository>();
+builder.Services.AddScoped<IChatInsightRepository, ChatInsightRepository>();
+builder.Services.AddScoped<IChatCommandService, ChatCommandService>();
+builder.Services.AddScoped<IChatMessageCommandService, ChatMessageCommandService>();
+builder.Services.AddScoped<IChatUserQueryService, ChatUserQueryService>();
+builder.Services.AddScoped<IChatQueryService, ChatQueryService>();
+builder.Services.AddScoped<IChatMessageQueryService, ChatMessageQueryService>();
+builder.Services.AddScoped<IChatPinnedAssetQueryService, ChatPinnedAssetQueryService>();
+builder.Services.AddScoped<IChatInsightQueryService, ChatInsightQueryService>();
+builder.Services.AddScoped<ChatHubSampleDataSeeder>();
+
 var app = builder.Build();
 
 // Apply pending migrations at startup.
@@ -82,6 +103,9 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
+
+    var chatHubSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ChatHubSampleDataSeeder>();
+    await chatHubSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

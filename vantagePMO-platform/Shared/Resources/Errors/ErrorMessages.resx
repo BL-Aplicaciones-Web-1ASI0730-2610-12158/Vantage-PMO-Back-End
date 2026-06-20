@@ -47,6 +47,25 @@
     <value>An unexpected internal error occurred in Profiles.</value>
   </data>
 
+    <data name="ChatHubError.ChatNotFound" xml:space="preserve">
+    <value>Chat not found.</value>
+  </data>
+    <data name="ChatHubError.InvalidChatData" xml:space="preserve">
+    <value>Invalid chat data provided.</value>
+  </data>
+    <data name="ChatHubError.InvalidMessageData" xml:space="preserve">
+    <value>Invalid chat message data provided.</value>
+  </data>
+    <data name="ChatHubError.OperationCancelled" xml:space="preserve">
+    <value>Chat Hub operation was cancelled.</value>
+  </data>
+    <data name="ChatHubError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during Chat Hub operation.</value>
+  </data>
+    <data name="ChatHubError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Chat Hub.</value>
+  </data>
+
     <data name="PublishingError.CategoryNotFound" xml:space="preserve">
     <value>Category not found.</value>
   </data>

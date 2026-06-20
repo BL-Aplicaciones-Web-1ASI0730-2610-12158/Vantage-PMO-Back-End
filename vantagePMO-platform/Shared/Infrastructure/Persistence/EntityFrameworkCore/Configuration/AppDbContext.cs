@@ -1,4 +1,5 @@
 using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // Profiles Context
         builder.ApplyProfilesConfiguration();
+
+        // Chat Hub Context
+        builder.ApplyChatHubConfiguration();
 
         // IAM Context
         // builder.ApplyIamConfiguration(); // TODO: enable when the IAM bounded context is implemented.
