@@ -65,4 +65,8 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-insights?chatId=pmo-strategic-alignment
 Accept: application/json
 
+### Quick Reports (Segment 1)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
+Accept: application/json
+
 ###
