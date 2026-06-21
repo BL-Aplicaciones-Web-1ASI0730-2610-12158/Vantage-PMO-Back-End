@@ -46,6 +46,11 @@ using vantagePMO_platform.Reports.Application.Internal.QueryServices;
 using vantagePMO_platform.Reports.Application.QueryServices;
 using vantagePMO_platform.Reports.Domain.Repositories;
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Analytics.Application.Internal.CommandServices;
+using vantagePMO_platform.Analytics.Application.Internal.QueryServices;
+using vantagePMO_platform.Analytics.Application.QueryServices;
+using vantagePMO_platform.Analytics.Domain.Repositories;
+using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -156,6 +161,11 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
 builder.Services.AddScoped<ReportsSampleDataSeeder>();
 
+// Analytics bounded context dependency injection.
+builder.Services.AddScoped<IAnalyticsDashboardRepository, AnalyticsDashboardRepository>();
+builder.Services.AddScoped<IAnalyticsDashboardQueryService, AnalyticsDashboardQueryService>();
+builder.Services.AddScoped<AnalyticsSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -184,6 +194,9 @@ using (var scope = app.Services.CreateScope())
 
     var reportsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ReportsSampleDataSeeder>();
     await reportsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var analyticsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<AnalyticsSampleDataSeeder>();
+    await analyticsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
