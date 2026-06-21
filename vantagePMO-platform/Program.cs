@@ -24,6 +24,12 @@ using vantagePMO_platform.Reports.Application.Internal.QueryServices;
 using vantagePMO_platform.Reports.Application.QueryServices;
 using vantagePMO_platform.Reports.Domain.Repositories;
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Meetings.Application.CommandServices;
+using vantagePMO_platform.Meetings.Application.Internal.CommandServices;
+using vantagePMO_platform.Meetings.Application.Internal.QueryServices;
+using vantagePMO_platform.Meetings.Application.QueryServices;
+using vantagePMO_platform.Meetings.Domain.Repositories;
+using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using VantagePMO_platform.Shared.Domain.Repositories;
 using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -115,6 +121,11 @@ builder.Services.AddScoped<ReportsSampleDataSeeder>();
 builder.Services.AddScoped<IAnalyticsDashboardRepository, AnalyticsDashboardRepository>();
 builder.Services.AddScoped<IAnalyticsDashboardQueryService, AnalyticsDashboardQueryService>();
 builder.Services.AddScoped<AnalyticsSampleDataSeeder>();
+
+// Meetings bounded context dependency injection.
+builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
+builder.Services.AddScoped<IMeetingCommandService, MeetingCommandService>();
+builder.Services.AddScoped<IMeetingQueryService, MeetingQueryService>();
 
 var app = builder.Build();
 

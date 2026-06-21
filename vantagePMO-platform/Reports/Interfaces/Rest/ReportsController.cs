@@ -1,7 +1,6 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Reports.Application.QueryServices;
 using vantagePMO_platform.Reports.Domain.Model.Queries;
 using vantagePMO_platform.Reports.Interfaces.Rest.Resources;
@@ -9,7 +8,6 @@ using vantagePMO_platform.Reports.Interfaces.Rest.Transform;
 
 namespace vantagePMO_platform.Reports.Interfaces.Rest;
 
-[AllowAnonymous]
 [ApiController]
 [Route("api/v1/reports")]
 [Produces(MediaTypeNames.Application.Json)]

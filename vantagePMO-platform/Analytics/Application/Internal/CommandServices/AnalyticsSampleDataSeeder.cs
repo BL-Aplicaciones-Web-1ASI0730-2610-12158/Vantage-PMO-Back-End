@@ -1,7 +1,7 @@
 using vantagePMO_platform.Analytics.Domain.Model.Aggregates;
 using vantagePMO_platform.Analytics.Domain.Model.ValueObjects;
 using vantagePMO_platform.Analytics.Domain.Repositories;
-using vantagePMO_platform.Shared.Domain.Repositories;
+using VantagePMO_platform.Shared.Domain.Repositories;
 
 namespace vantagePMO_platform.Analytics.Application.Internal.CommandServices;
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using vantagePMO_platform.Reports.Domain.Model.Aggregates;
 using vantagePMO_platform.Reports.Domain.Repositories;
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
 namespace vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 

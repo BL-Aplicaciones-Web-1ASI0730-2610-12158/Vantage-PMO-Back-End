@@ -1,6 +1,7 @@
 using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
@@ -48,6 +49,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // Analytics Context
         builder.ApplyAnalyticsConfiguration();
+
+        // Meetings Context
+        builder.ApplyMeetingsConfiguration();
 
         // IAM Context
         // builder.ApplyIamConfiguration(); // TODO: enable when the IAM bounded context is implemented.

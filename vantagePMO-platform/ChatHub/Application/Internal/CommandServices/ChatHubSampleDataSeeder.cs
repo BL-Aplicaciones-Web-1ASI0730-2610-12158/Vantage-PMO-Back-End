@@ -2,7 +2,7 @@ using vantagePMO_platform.ChatHub.Domain.Model.Aggregates;
 using vantagePMO_platform.ChatHub.Domain.Model.Commands;
 using vantagePMO_platform.ChatHub.Domain.Model.ValueObjects;
 using vantagePMO_platform.ChatHub.Domain.Repositories;
-using vantagePMO_platform.Shared.Domain.Repositories;
+using VantagePMO_platform.Shared.Domain.Repositories;
 
 namespace vantagePMO_platform.ChatHub.Application.Internal.CommandServices;
 

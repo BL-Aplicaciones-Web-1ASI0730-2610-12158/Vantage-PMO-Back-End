@@ -1,6 +1,6 @@
 using vantagePMO_platform.Reports.Domain.Model.Aggregates;
 using vantagePMO_platform.Reports.Domain.Repositories;
-using vantagePMO_platform.Shared.Domain.Repositories;
+using VantagePMO_platform.Shared.Domain.Repositories;
 
 namespace vantagePMO_platform.Reports.Application.Internal.CommandServices;
 
