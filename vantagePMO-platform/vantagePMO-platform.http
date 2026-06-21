@@ -69,4 +69,8 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json
 
+### Analytics Dashboard
+GET {{vantagePMO_platform_HostAddress}}/api/v1/analytics
+Accept: application/json
+
 ###

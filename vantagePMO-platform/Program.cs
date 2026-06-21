@@ -8,6 +8,11 @@ using VantagePMO_platform.Profiles.Application.Internal.QueryServices;
 using VantagePMO_platform.Profiles.Domain.Repositories;
 using VantagePMO_platform.Profiles.Domain.Services;
 using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Analytics.Application.Internal.CommandServices;
+using vantagePMO_platform.Analytics.Application.Internal.QueryServices;
+using vantagePMO_platform.Analytics.Application.QueryServices;
+using vantagePMO_platform.Analytics.Domain.Repositories;
+using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.ChatHub.Application.CommandServices;
 using vantagePMO_platform.ChatHub.Application.Internal.CommandServices;
 using vantagePMO_platform.ChatHub.Application.Internal.QueryServices;
@@ -106,6 +111,11 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
 builder.Services.AddScoped<ReportsSampleDataSeeder>();
 
+// Analytics bounded context dependency injection.
+builder.Services.AddScoped<IAnalyticsDashboardRepository, AnalyticsDashboardRepository>();
+builder.Services.AddScoped<IAnalyticsDashboardQueryService, AnalyticsDashboardQueryService>();
+builder.Services.AddScoped<AnalyticsSampleDataSeeder>();
+
 var app = builder.Build();
 
 // Apply pending migrations at startup.
@@ -119,6 +129,9 @@ using (var scope = app.Services.CreateScope())
 
     var reportsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ReportsSampleDataSeeder>();
     await reportsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var analyticsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<AnalyticsSampleDataSeeder>();
+    await analyticsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
