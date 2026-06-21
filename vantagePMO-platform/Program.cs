@@ -41,6 +41,11 @@ using vantagePMO_platform.ChatHub.Application.Internal.QueryServices;
 using vantagePMO_platform.ChatHub.Application.QueryServices;
 using vantagePMO_platform.ChatHub.Domain.Repositories;
 using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Reports.Application.Internal.CommandServices;
+using vantagePMO_platform.Reports.Application.Internal.QueryServices;
+using vantagePMO_platform.Reports.Application.QueryServices;
+using vantagePMO_platform.Reports.Domain.Repositories;
+using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -146,6 +151,11 @@ builder.Services.AddScoped<IChatPinnedAssetQueryService, ChatPinnedAssetQuerySer
 builder.Services.AddScoped<IChatInsightQueryService, ChatInsightQueryService>();
 builder.Services.AddScoped<ChatHubSampleDataSeeder>();
 
+// Reports bounded context dependency injection.
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+builder.Services.AddScoped<ReportsSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -171,6 +181,9 @@ using (var scope = app.Services.CreateScope())
 
     var chatHubSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ChatHubSampleDataSeeder>();
     await chatHubSampleDataSeeder.SeedIfEmptyAsync();
+
+    var reportsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ReportsSampleDataSeeder>();
+    await reportsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
