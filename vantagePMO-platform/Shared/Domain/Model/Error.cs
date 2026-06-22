@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Shared.Domain.Model;
+namespace vantagePMO_platform.Shared.Domain.Model;
 
 /// <summary>
 ///     Represents a domain error.

@@ -12,6 +12,18 @@
     <data name="IamError.UsernameAlreadyTaken" xml:space="preserve">
     <value>El nombre de usuario {0} ya está en uso.</value>
   </data>
+    <data name="IamError.EmailAlreadyRegistered" xml:space="preserve">
+    <value>La dirección de correo electrónico {0} ya está registrada.</value>
+  </data>
+    <data name="IamError.InvalidProfileData" xml:space="preserve">
+    <value>Datos de perfil inválidos proporcionados.</value>
+  </data>
+    <data name="IamError.InvalidDateOfBirth" xml:space="preserve">
+    <value>La fecha de nacimiento debe usar el formato {0}.</value>
+  </data>
+    <data name="IamError.PasswordMismatch" xml:space="preserve">
+    <value>La contraseña y la confirmación no coinciden.</value>
+  </data>
     <data name="IamError.InvalidCredentials" xml:space="preserve">
     <value>Nombre de usuario o contraseña inválidos.</value>
   </data>
@@ -45,6 +57,41 @@
   </data>
     <data name="ProfilesError.InternalServerError" xml:space="preserve">
     <value>Ocurrió un error interno inesperado en Perfiles.</value>
+  </data>
+
+    <data name="ProjectsError.ProjectNotFound" xml:space="preserve">
+    <value>Proyecto no encontrado.</value>
+  </data>
+    <data name="ProjectsError.InvalidProjectData" xml:space="preserve">
+    <value>Datos de proyecto inválidos proporcionados.</value>
+  </data>
+    <data name="ProjectsError.OperationCancelled" xml:space="preserve">
+    <value>La operación de proyecto fue cancelada.</value>
+  </data>
+    <data name="ProjectsError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de proyecto.</value>
+  </data>
+    <data name="ProjectsError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Proyectos.</value>
+  </data>
+
+    <data name="ChatHubError.ChatNotFound" xml:space="preserve">
+    <value>Chat no encontrado.</value>
+  </data>
+    <data name="ChatHubError.InvalidChatData" xml:space="preserve">
+    <value>Datos de chat inválidos proporcionados.</value>
+  </data>
+    <data name="ChatHubError.InvalidMessageData" xml:space="preserve">
+    <value>Datos de mensaje de chat inválidos proporcionados.</value>
+  </data>
+    <data name="ChatHubError.OperationCancelled" xml:space="preserve">
+    <value>La operación de Chat Hub fue cancelada.</value>
+  </data>
+    <data name="ChatHubError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de Chat Hub.</value>
+  </data>
+    <data name="ChatHubError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Chat Hub.</value>
   </data>
 
     <data name="PublishingError.CategoryNotFound" xml:space="preserve">

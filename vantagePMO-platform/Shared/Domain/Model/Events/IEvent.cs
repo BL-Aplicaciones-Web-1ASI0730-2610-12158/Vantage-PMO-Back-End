@@ -1,6 +1,6 @@
 using Cortex.Mediator.Notifications;
 
-namespace VantagePMO_platform.Shared.Domain.Model.Events;
+namespace vantagePMO_platform.Shared.Domain.Model.Events;
 
 /// <summary>
 ///     Represents a domain event in the system.

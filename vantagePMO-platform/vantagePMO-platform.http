@@ -1,6 +1,165 @@
 @vantagePMO_platform_HostAddress = http://localhost:5278
 
-GET {{vantagePMO_platform_HostAddress}}/weatherforecast/
+### Sign up (creates user + profile)
+POST {{vantagePMO_platform_HostAddress}}/api/v1/authentication/sign-up
+Content-Type: application/json
+Accept-Language: es
+
+{
+  "fullName": "Alex Sterling",
+  "username": "alex.sterling",
+  "role": "Project Manager",
+  "dateOfBirth": "15/03/1990",
+  "email": "alex.sterling@vantagepmo.io",
+  "password": "Secret123!",
+  "confirmPassword": "Secret123!"
+}
+
+### Sign in (200 OK, 400 if invalid credentials)
+POST {{vantagePMO_platform_HostAddress}}/api/v1/authentication/sign-in
+Content-Type: application/json
+
+{
+  "username": "alex.sterling",
+  "password": "Secret123!"
+}
+
+### Get a profile by id (200 OK, 404 if not found)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profiles/1
+Accept: application/json
+
+### Get a profile by email (200 OK, 400 if missing param, 404 if not found)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profiles?email=alex.sterling@vantagepmo.io
+Accept: application/json
+
+### Partially update a profile (200 OK, 404 if not found, 409 if email duplicated)
+PATCH {{vantagePMO_platform_HostAddress}}/api/v1/profiles/1
+Content-Type: application/json
+
+{
+  "role": "Senior Project Manager",
+  "availabilityLabel": "Fully Booked"
+}
+
+### Frontend contract — get profile by user id
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Accept: application/json
+
+### Frontend contract — get profile by email (returns array)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users?email=alex.sterling@vantagepmo.io
+Accept: application/json
+
+### Frontend contract — update profile by user id
+PATCH {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Content-Type: application/json
+
+{
+  "role": "Senior Project Manager",
+  "location": "London, UK",
+  "bio": ["Updated biography paragraph."]
+}
+
+### Frontend contract — profile stats
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats?userId=1
+Accept: application/json
+
+### Frontend contract — profile skills
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profile-skills?userId=1
+Accept: application/json
+
+### Frontend contract — endorsements
+GET {{vantagePMO_platform_HostAddress}}/api/v1/endorsements?userId=1
+Accept: application/json
+
+### Get all projects
+GET {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Accept: application/json
+
+### Create a project
+POST {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Mixed-use development with retail, residential, and office components.",
+  "status": "healthy",
+  "progress": 0,
+  "startDate": "2026-01-15",
+  "dueDate": "2026-12-31",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" }
+  ],
+  "milestones": []
+}
+
+### Update a project
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/projects/1
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Updated mixed-use development scope.",
+  "status": "at-risk",
+  "progress": 64,
+  "startDate": "2026-01-15",
+  "dueDate": "Delayed: Supply",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" },
+    { "id": 2, "name": "Benjamin", "avatar": "B" }
+  ],
+  "milestones": [
+    { "id": 1, "name": "Final Audit Submission", "date": "Oct 14", "type": "warning" }
+  ]
+}
+
+### Dashboard — priority tasks
+GET {{vantagePMO_platform_HostAddress}}/api/v1/tasks
+Accept: application/json
+
+### Dashboard — schedule
+GET {{vantagePMO_platform_HostAddress}}/api/v1/schedule
+Accept: application/json
+
+### Dashboard — departments
+GET {{vantagePMO_platform_HostAddress}}/api/v1/departments
+Accept: application/json
+
+### Dashboard — portfolio stats (no userId)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats
+Accept: application/json
+
+### Chat Hub — users
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-users
+Accept: application/json
+
+### Chat Hub — chats
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chats
+Accept: application/json
+
+### Chat Hub — messages
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-messages
+Accept: application/json
+
+### Chat Hub — pinned assets
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-pinned-assets?chatId=pmo-strategic-alignment
+Accept: application/json
+
+### Chat Hub — insights
+GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-insights?chatId=pmo-strategic-alignment
+Accept: application/json
+
+### Quick Reports (Segment 1)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
+Accept: application/json
+
+### Analytics Dashboard
+GET {{vantagePMO_platform_HostAddress}}/api/v1/analytics
 Accept: application/json
 
 ###
