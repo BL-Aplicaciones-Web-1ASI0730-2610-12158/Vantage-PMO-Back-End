@@ -1,6 +1,6 @@
 using Cortex.Mediator.Commands;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
+namespace VantagePMO_platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
 
 public class LoggingCommandBehavior<TCommand>
     : ICommandPipelineBehavior<TCommand> where TCommand : ICommand

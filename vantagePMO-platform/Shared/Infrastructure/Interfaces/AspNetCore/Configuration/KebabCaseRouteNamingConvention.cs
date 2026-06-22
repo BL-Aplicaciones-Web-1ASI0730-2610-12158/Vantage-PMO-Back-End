@@ -1,7 +1,7 @@
-using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration.Extensions;
+using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
+namespace VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 
 /// <summary>
 ///     This class is used to replace the default route naming convention with a kebab-case naming convention.

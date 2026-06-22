@@ -1,6 +1,6 @@
-using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Components;
+using VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Components;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+namespace VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
 
 /// <summary>
 ///     Middleware extensions

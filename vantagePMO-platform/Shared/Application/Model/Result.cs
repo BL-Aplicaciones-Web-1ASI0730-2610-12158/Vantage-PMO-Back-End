@@ -1,6 +1,6 @@
 // Added for Enum
 
-namespace vantagePMO_platform.Shared.Application.Model;
+namespace VantagePMO_platform.Shared.Application.Model;
 
 /// <summary>
 ///     Generic Result class for Command Handlers in the Application Layer.

@@ -1,8 +1,8 @@
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using Microsoft.EntityFrameworkCore;
-using vantagePMO_platform.Shared.Domain.Repositories;
+using VantagePMO_platform.Shared.Domain.Repositories;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
 ///     Base repository for all repositories

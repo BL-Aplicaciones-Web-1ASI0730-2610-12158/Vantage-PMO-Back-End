@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration.Extensions;
+namespace VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration.Extensions;
 
 /// <summary>
 ///     Extension methods for <see cref="string" />.

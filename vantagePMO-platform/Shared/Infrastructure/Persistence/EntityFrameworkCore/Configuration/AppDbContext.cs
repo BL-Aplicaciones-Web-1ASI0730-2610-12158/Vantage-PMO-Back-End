@@ -1,16 +1,8 @@
-using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
-using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
-namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
 /// <summary>
 ///     Application database context for the Learning Center Platform
@@ -44,26 +36,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Profiles Context
         builder.ApplyProfilesConfiguration();
 
-        // Projects Context
-        builder.ApplyProjectsConfiguration();
-
-        // Dashboard Context
-        builder.ApplyDashboardConfiguration();
-
-        // Chat Hub Context
-        builder.ApplyChatHubConfiguration();
-
-        // Reports Context
-        builder.ApplyReportsConfiguration();
-
-        // Analytics Context
-        builder.ApplyAnalyticsConfiguration();
-
         // IAM Context
         builder.ApplyIamConfiguration();
-        
-        // Meetings Context
-        builder.ApplyMeetingsConfiguration();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
