@@ -278,6 +278,90 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.ToTable("chat_users", (string)null);
                 });
 
+            modelBuilder.Entity("vantagePMO_platform.Meetings.Domain.Model.Aggregates.Meeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Agreements")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("agreements");
+
+                    b.Property<string>("Attendees")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("attendees");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("duration");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("location");
+
+                    b.Property<string>("Minutes")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("minutes");
+
+                    b.Property<string>("Organizer")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("organizer");
+
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("segment");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    b.Property<TimeOnly>("Time")
+                        .HasColumnType("time")
+                        .HasColumnName("time");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("title");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_meetings");
+
+                    b.ToTable("meetings", (string)null);
+                });
+
             modelBuilder.Entity("VantagePMO_platform.Profiles.Domain.Model.Aggregates.Profile", b =>
                 {
                     b.Property<int>("Id")

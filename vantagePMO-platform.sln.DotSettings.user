@@ -1,8 +1,15 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+<<<<<<< HEAD
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FDomain_002FModel_002FErrors_002FResources_002FIamErrors/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FDomain_002FModel_002FErrors_002FResources_002FIamErrors/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FResources_002FIamMessages/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FResources_002FIamMessages/@EntryIndexRemoved">True</s:Boolean>
+=======
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FDomain_002FModel_002FErrors_002FResources_002FIamErrors/@EntryIndexedValue">True</s:Boolean>
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FIam_002FResources_002FIamMessages/@EntryIndexedValue">True</s:Boolean>
+	
+>>>>>>> 84c272c (fix: enhance app settings password and  swagger ui)
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FShared_002FResources_002FCommonMessages/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=vantagePMO_002Dplatform_002FShared_002FResources_002FErrors_002FErrorMessages/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean></wpf:ResourceDictionary>

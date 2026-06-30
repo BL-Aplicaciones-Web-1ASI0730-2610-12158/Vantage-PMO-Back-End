@@ -22,7 +22,7 @@ public class GlobalExceptionHandlerMiddleware(
     IStringLocalizer<CommonMessages> // Corrected to Commons
         commonLocalizer) // Inject IStringLocalizer for common messages like "Internal Server Error"
 {
-    private readonly IStringLocalizer<CommonMessages> _commonLocalizer = commonLocalizer; // Corrected to Commons
+    private readonly IStringLocalizer<CommonMessages> _commonLocalizer = commonLocalizer; 
     private readonly IStringLocalizer<ErrorMessages> _errorLocalizer = errorLocalizer;
 
     /**
@@ -36,7 +36,11 @@ public class GlobalExceptionHandlerMiddleware(
     {
         try
         {
-            await next(context);
+            var path = context.Request.Path.Value?.ToLower();
+            if (path != null && (path.Contains("/swagger") || path.Contains("/swagger-ui")))
+            {
+                await next(context);
+            }        
         }
         catch (OperationCanceledException ex)
         {
