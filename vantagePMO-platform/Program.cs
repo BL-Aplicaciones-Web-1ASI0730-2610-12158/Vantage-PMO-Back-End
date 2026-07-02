@@ -63,6 +63,12 @@ using vantagePMO_platform.Support.Application.Internal.QueryServices;
 using vantagePMO_platform.Support.Application.QueryServices;
 using vantagePMO_platform.Support.Domain.Repositories;
 using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Settings.Application.CommandServices;
+using vantagePMO_platform.Settings.Application.Internal.CommandServices;
+using vantagePMO_platform.Settings.Application.Internal.QueryServices;
+using vantagePMO_platform.Settings.Application.QueryServices;
+using vantagePMO_platform.Settings.Domain.Repositories;
+using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -198,6 +204,12 @@ builder.Services.AddScoped<ISupportTicketCommandService, SupportTicketCommandSer
 builder.Services.AddScoped<ISupportTicketQueryService, SupportTicketQueryService>();
 builder.Services.AddScoped<SupportSampleDataSeeder>();
 
+// Settings bounded context dependency injection.
+builder.Services.AddScoped<IUserSettingsRepository, UserSettingsRepository>();
+builder.Services.AddScoped<IUserSettingsCommandService, UserSettingsCommandService>();
+builder.Services.AddScoped<IUserSettingsQueryService, UserSettingsQueryService>();
+builder.Services.AddScoped<SettingsSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -235,6 +247,9 @@ using (var scope = app.Services.CreateScope())
 
     var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
     await supportSampleDataSeeder.SeedIfEmptyAsync();
+
+    var settingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SettingsSampleDataSeeder>();
+    await settingsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

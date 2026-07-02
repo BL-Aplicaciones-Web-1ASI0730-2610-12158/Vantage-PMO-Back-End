@@ -210,6 +210,39 @@ Content-Type: application/json
   "assignee": "Support Team"
 }
 
+### User Settings — get
+GET {{vantagePMO_platform_HostAddress}}/api/v1/user-settings
+Accept: application/json
+
+### User Settings — update
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/user-settings
+Content-Type: application/json
+
+{
+  "id": 1,
+  "theme": "dark",
+  "language": "es",
+  "timezone": "America/Bogota",
+  "dateFormat": "DD/MM/YYYY",
+  "timeFormat": "24h",
+  "firstDayOfWeek": "Monday",
+  "currency": "USD",
+  "accentColor": "#8b5cf6",
+  "density": "comfortable",
+  "emailNotifications": true,
+  "pushNotifications": false,
+  "weeklyDigest": false,
+  "mentionAlerts": true,
+  "twoFactorEnabled": false,
+  "profileVisibility": "team",
+  "displayName": "Alex Sterling",
+  "jobTitle": "Lead Architect",
+  "bio": "Precision-driven PMO leader with a focus on strategic execution and team performance.",
+  "phone": "+1 (555) 234-5678",
+  "department": "Executive",
+  "updatedAt": "2026-05-14"
+}
+
 ### Quick Reports (Segment 1)
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json

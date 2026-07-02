@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
@@ -68,6 +69,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // Support Context
         builder.ApplySupportConfiguration();
+
+        // Settings Context
+        builder.ApplySettingsConfiguration();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
