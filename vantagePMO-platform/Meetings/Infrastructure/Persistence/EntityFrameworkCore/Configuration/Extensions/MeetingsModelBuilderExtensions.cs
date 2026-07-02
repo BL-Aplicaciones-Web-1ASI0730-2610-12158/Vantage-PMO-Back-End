@@ -1,63 +1,75 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vantagePMO_platform.Meetings.Domain.Model.Aggregates;
+using vantagePMO_platform.Meetings.Domain.Model.ValueObjects;
 
 namespace vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
-/// <summary>
-/// Configuración de mapeo EF Core para el agregado Meeting.
-/// Llamar a ApplyMeetingsConfiguration(builder) desde
-/// AppDbContext.OnModelCreating, junto con la configuración de los demás contextos.
-/// </summary>
 public static class MeetingsModelBuilderExtensions
 {
     public static void ApplyMeetingsConfiguration(this ModelBuilder builder)
     {
+        var attendeesConverter = new ValueConverter<List<string>, string>(
+            value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
+            value => JsonSerializer.Deserialize<List<string>>(value, (JsonSerializerOptions?)null) ?? new List<string>());
+
+        var attendeesComparer = new ValueComparer<List<string>>(
+            (left, right) => (left ?? new List<string>()).SequenceEqual(right ?? new List<string>()),
+            value => value.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.GetHashCode())),
+            value => value.ToList());
+
+        var minutesConverter = new ValueConverter<List<MeetingMinuteItem>, string>(
+            value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
+            value => JsonSerializer.Deserialize<List<MeetingMinuteItem>>(value, (JsonSerializerOptions?)null)
+                     ?? new List<MeetingMinuteItem>());
+
+        var minutesComparer = new ValueComparer<List<MeetingMinuteItem>>(
+            (left, right) => JsonSerializer.Serialize(left, (JsonSerializerOptions?)null)
+                             == JsonSerializer.Serialize(right, (JsonSerializerOptions?)null),
+            value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null).GetHashCode(),
+            value => JsonSerializer.Deserialize<List<MeetingMinuteItem>>(
+                JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
+                (JsonSerializerOptions?)null) ?? new List<MeetingMinuteItem>());
+
+        var agreementsConverter = new ValueConverter<List<MeetingAgreementItem>, string>(
+            value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
+            value => JsonSerializer.Deserialize<List<MeetingAgreementItem>>(value, (JsonSerializerOptions?)null)
+                       ?? new List<MeetingAgreementItem>());
+
+        var agreementsComparer = new ValueComparer<List<MeetingAgreementItem>>(
+            (left, right) => JsonSerializer.Serialize(left, (JsonSerializerOptions?)null)
+                             == JsonSerializer.Serialize(right, (JsonSerializerOptions?)null),
+            value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null).GetHashCode(),
+            value => JsonSerializer.Deserialize<List<MeetingAgreementItem>>(
+                JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
+                (JsonSerializerOptions?)null) ?? new List<MeetingAgreementItem>());
+
         builder.Entity<Meeting>(entity =>
         {
             entity.ToTable("meetings");
-
-            entity.HasKey(m => m.Id);
-            entity.Property(m => m.Id)
-                .IsRequired()
-                .ValueGeneratedOnAdd();
-
-            entity.Property(m => m.Title).IsRequired().HasMaxLength(150);
-            entity.Property(m => m.Date).IsRequired();
-            entity.Property(m => m.Time).IsRequired();
-            entity.Property(m => m.Duration).IsRequired().HasMaxLength(50);
-            entity.Property(m => m.Location).IsRequired().HasMaxLength(150);
-            entity.Property(m => m.Type).IsRequired().HasMaxLength(50);
-            entity.Property(m => m.Status).IsRequired().HasMaxLength(50);
-            entity.Property(m => m.Organizer).IsRequired().HasMaxLength(150);
-            entity.Property(m => m.Description).HasMaxLength(1000);
-            entity.Property(m => m.Segment).HasMaxLength(100);
-
-            // Las listas (attendees, minutes, agreements) se serializan como JSON
-            // en una sola columna de texto, ya que son colecciones de valores simples.
-            entity.Property(m => m.Attendees)
-                .HasConversion(
-                    list => JsonSerializer.Serialize(list, (JsonSerializerOptions?)null),
-                    json => JsonSerializer.Deserialize<List<string>>(json, (JsonSerializerOptions?)null) ?? new List<string>())
-                .Metadata.SetValueComparer(StringListComparer);
-
-            entity.Property(m => m.Minutes)
-                .HasConversion(
-                    list => JsonSerializer.Serialize(list, (JsonSerializerOptions?)null),
-                    json => JsonSerializer.Deserialize<List<string>>(json, (JsonSerializerOptions?)null) ?? new List<string>())
-                .Metadata.SetValueComparer(StringListComparer);
-
-            entity.Property(m => m.Agreements)
-                .HasConversion(
-                    list => JsonSerializer.Serialize(list, (JsonSerializerOptions?)null),
-                    json => JsonSerializer.Deserialize<List<string>>(json, (JsonSerializerOptions?)null) ?? new List<string>())
-                .Metadata.SetValueComparer(StringListComparer);
+            entity.HasKey(meeting => meeting.Id);
+            entity.Property(meeting => meeting.Id).ValueGeneratedOnAdd();
+            entity.Property(meeting => meeting.Title).IsRequired().HasMaxLength(150);
+            entity.Property(meeting => meeting.Date).IsRequired();
+            entity.Property(meeting => meeting.Time).IsRequired();
+            entity.Property(meeting => meeting.Duration).IsRequired();
+            entity.Property(meeting => meeting.Location).IsRequired().HasMaxLength(150);
+            entity.Property(meeting => meeting.Type).IsRequired().HasMaxLength(50);
+            entity.Property(meeting => meeting.Status).IsRequired().HasMaxLength(50);
+            entity.Property(meeting => meeting.Organizer).IsRequired().HasMaxLength(150);
+            entity.Property(meeting => meeting.Description).HasMaxLength(2000);
+            entity.Property(meeting => meeting.Segment).HasMaxLength(100);
+            entity.Property(meeting => meeting.Attendees)
+                .HasConversion(attendeesConverter)
+                .Metadata.SetValueComparer(attendeesComparer);
+            entity.Property(meeting => meeting.Minutes)
+                .HasConversion(minutesConverter)
+                .Metadata.SetValueComparer(minutesComparer);
+            entity.Property(meeting => meeting.Agreements)
+                .HasConversion(agreementsConverter)
+                .Metadata.SetValueComparer(agreementsComparer);
         });
     }
-
-    private static readonly ValueComparer<List<string>> StringListComparer = new(
-        (a, b) => (a ?? new List<string>()).SequenceEqual(b ?? new List<string>()),
-        v => v.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.GetHashCode())),
-        v => v.ToList());
 }
