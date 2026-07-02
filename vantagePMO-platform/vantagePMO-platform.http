@@ -89,6 +89,38 @@ Content-Type: application/json
   "agreements": []
 }
 
+### Support — list
+GET {{vantagePMO_platform_HostAddress}}/api/v1/support-tickets
+Accept: application/json
+
+### Support — create
+POST {{vantagePMO_platform_HostAddress}}/api/v1/support-tickets
+Content-Type: application/json
+
+{
+  "title": "Login page not loading",
+  "description": "Users report a blank screen after submitting credentials.",
+  "category": "Bug",
+  "priority": "High",
+  "status": "Open",
+  "createdAt": "2026-06-17",
+  "assignee": "Support Team"
+}
+
+### Support — update status
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/support-tickets/1
+Content-Type: application/json
+
+{
+  "title": "Cannot export PDF reports",
+  "description": "The export button in the Reports section does not generate a PDF file.",
+  "category": "Bug",
+  "priority": "High",
+  "status": "In Progress",
+  "createdAt": "2026-05-10",
+  "assignee": "Support Team"
+}
+
 ### Quick Reports (Segment 1)
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json

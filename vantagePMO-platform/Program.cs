@@ -30,11 +30,25 @@ using vantagePMO_platform.Meetings.Application.Internal.QueryServices;
 using vantagePMO_platform.Meetings.Application.QueryServices;
 using vantagePMO_platform.Meetings.Domain.Repositories;
 using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+<<<<<<< HEAD
 using VantagePMO_platform.Shared.Domain.Repositories;
 using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+=======
+using vantagePMO_platform.Support.Application.CommandServices;
+using vantagePMO_platform.Support.Application.Internal.CommandServices;
+using vantagePMO_platform.Support.Application.Internal.QueryServices;
+using vantagePMO_platform.Support.Application.QueryServices;
+using vantagePMO_platform.Support.Domain.Repositories;
+using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+>>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -136,6 +150,24 @@ builder.Services.AddScoped<IMeetingCommandService, MeetingCommandService>();
 builder.Services.AddScoped<IMeetingQueryService, MeetingQueryService>();
 builder.Services.AddScoped<MeetingsSampleDataSeeder>();
 
+<<<<<<< HEAD
+=======
+// Support bounded context dependency injection.
+builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+builder.Services.AddScoped<ISupportTicketCommandService, SupportTicketCommandService>();
+builder.Services.AddScoped<ISupportTicketQueryService, SupportTicketQueryService>();
+builder.Services.AddScoped<SupportSampleDataSeeder>();
+
+// IAM bounded context dependency injection.
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
+
+>>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 var app = builder.Build();
 
 // Apply pending migrations at startup.
@@ -155,6 +187,9 @@ using (var scope = app.Services.CreateScope())
 
     var meetingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<MeetingsSampleDataSeeder>();
     await meetingsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
+    await supportSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

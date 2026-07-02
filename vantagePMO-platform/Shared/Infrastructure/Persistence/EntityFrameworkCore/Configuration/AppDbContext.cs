@@ -2,10 +2,14 @@ using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCor
 using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+<<<<<<< HEAD
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
+=======
+using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+>>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 
 namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
@@ -53,8 +57,13 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Meetings Context
         builder.ApplyMeetingsConfiguration();
 
+<<<<<<< HEAD
         // IAM Context
         // builder.ApplyIamConfiguration(); // TODO: enable when the IAM bounded context is implemented.
+=======
+        // Support Context
+        builder.ApplySupportConfiguration();
+>>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();
