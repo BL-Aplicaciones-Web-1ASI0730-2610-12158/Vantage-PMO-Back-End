@@ -57,6 +57,12 @@ using vantagePMO_platform.Meetings.Application.Internal.QueryServices;
 using vantagePMO_platform.Meetings.Application.QueryServices;
 using vantagePMO_platform.Meetings.Domain.Repositories;
 using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Support.Application.CommandServices;
+using vantagePMO_platform.Support.Application.Internal.CommandServices;
+using vantagePMO_platform.Support.Application.Internal.QueryServices;
+using vantagePMO_platform.Support.Application.QueryServices;
+using vantagePMO_platform.Support.Domain.Repositories;
+using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -186,6 +192,12 @@ builder.Services.AddScoped<IMeetingCommandService, MeetingCommandService>();
 builder.Services.AddScoped<IMeetingQueryService, MeetingQueryService>();
 builder.Services.AddScoped<MeetingsSampleDataSeeder>();
 
+// Support bounded context dependency injection.
+builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+builder.Services.AddScoped<ISupportTicketCommandService, SupportTicketCommandService>();
+builder.Services.AddScoped<ISupportTicketQueryService, SupportTicketQueryService>();
+builder.Services.AddScoped<SupportSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -220,6 +232,9 @@ using (var scope = app.Services.CreateScope())
 
     var meetingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<MeetingsSampleDataSeeder>();
     await meetingsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
+    await supportSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
