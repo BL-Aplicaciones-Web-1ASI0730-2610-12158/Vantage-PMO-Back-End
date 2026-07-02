@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using vantagePMO_platform.Iam.Application.CommandServices;
 using vantagePMO_platform.Iam.Application.QueryServices;
 using vantagePMO_platform.Iam.Domain.Model;
+using vantagePMO_platform.Iam.Domain.Model.Aggregates;
 using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Domain.Model.Queries;
 using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
@@ -154,15 +155,15 @@ public class UsersController(
     }
 
     /// <summary>
-    ///     Partially updates the profile linked to the given user id.
+    ///     Partially updates the profile or password for the given user id.
     /// </summary>
     [HttpPatch("{id:int}")]
     [AllowAnonymous]
-    [SwaggerOperation(Summary = "Update profile by user id", OperationId = "UpdateProfileByUserId")]
+    [SwaggerOperation(Summary = "Update profile or password by user id", OperationId = "UpdateProfileByUserId")]
     [SwaggerResponse(StatusCodes.Status200OK, "The profile was updated.", typeof(ProfileResource))]
     public async Task<IActionResult> UpdateProfileByUserId(
         int id,
-        [FromBody] UpdateProfileResource resource,
+        [FromBody] FrontPatchUserResource resource,
         CancellationToken cancellationToken)
     {
         var profile = await profileQueryService.Handle(new GetProfileByUserIdQuery(id), cancellationToken);
@@ -175,10 +176,41 @@ public class UsersController(
                 errorLocalizer["ProfilesError.ProfileNotFound"]);
         }
 
+        if (!string.IsNullOrWhiteSpace(resource.Password))
+        {
+            var passwordResult = await userCommandService.UpdatePasswordAsync(
+                new UpdatePasswordCommand(id, resource.Password),
+                cancellationToken);
+
+            if (passwordResult.IsFailure)
+                return MapIamErrorToActionResult(passwordResult);
+
+            return Ok(ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile, exposeUserId: true));
+        }
+
+        var profileResource = new UpdateProfileResource(
+            resource.Name,
+            resource.Email,
+            resource.Role,
+            resource.DateOfBirth,
+            resource.Department,
+            resource.Joined,
+            resource.AvatarSeed,
+            resource.Availability,
+            resource.Experience,
+            resource.DeliveryRate,
+            resource.ActiveBudget,
+            resource.Bio,
+            resource.Certifications,
+            resource.SkillsDescription,
+            resource.Location,
+            resource.YearsActive,
+            resource.AvailabilityLabel);
+
         UpdateProfileCommand command;
         try
         {
-            command = UpdateProfileCommandFromResourceAssembler.ToCommandFromResource(profile.Id, resource);
+            command = UpdateProfileCommandFromResourceAssembler.ToCommandFromResource(profile.Id, profileResource);
         }
         catch (ArgumentException)
         {
@@ -218,6 +250,21 @@ public class UsersController(
         {
             new FrontSignInUserResource(result.Value!.user.Id, result.Value.user.Username, resolvedEmail)
         });
+    }
+
+    private IActionResult MapIamErrorToActionResult(Result<User> result)
+    {
+        var error = result.Error as IamError?;
+        var statusCode = error switch
+        {
+            IamError.UserNotFound => StatusCodes.Status404NotFound,
+            IamError.InvalidProfileData => StatusCodes.Status400BadRequest,
+            IamError.OperationCancelled => StatusCodes.Status400BadRequest,
+            IamError.DatabaseError => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status400BadRequest
+        };
+
+        return problemDetailsFactory.CreateProblemDetails(this, statusCode, result.Error, result.Message);
     }
 
     private IActionResult MapErrorToActionResult(Result<Profile> result)

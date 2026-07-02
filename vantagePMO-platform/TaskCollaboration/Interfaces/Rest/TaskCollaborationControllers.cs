@@ -1,6 +1,9 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using vantagePMO_platform.Dashboard.Application.QueryServices;
+using vantagePMO_platform.Dashboard.Domain.Model.Queries;
+using vantagePMO_platform.Dashboard.Interfaces.Rest.Transform;
 using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.TaskCollaboration.Application.CommandServices;
 using vantagePMO_platform.TaskCollaboration.Application.QueryServices;
@@ -49,12 +52,19 @@ public class BoardMembersController(IBoardMemberQueryService boardMemberQuerySer
 [SwaggerTag("Team board tasks")]
 public class CollaborationTasksController(
     ICollaborationTaskCommandService collaborationTaskCommandService,
-    ICollaborationTaskQueryService collaborationTaskQueryService) : ControllerBase
+    ICollaborationTaskQueryService collaborationTaskQueryService,
+    IDashboardTaskQueryService dashboardTaskQueryService) : ControllerBase
 {
     [HttpGet]
-    [SwaggerOperation(Summary = "Get collaboration tasks", OperationId = "GetCollaborationTasks")]
+    [SwaggerOperation(Summary = "Get dashboard or collaboration tasks", OperationId = "GetCollaborationTasks")]
     public async Task<IActionResult> GetAll([FromQuery] int? boardId, CancellationToken cancellationToken)
     {
+        if (!boardId.HasValue)
+        {
+            var dashboardTasks = await dashboardTaskQueryService.Handle(new GetAllDashboardTasksQuery(), cancellationToken);
+            return Ok(DashboardTaskResourceFromEntityAssembler.ToResourcesFromEntities(dashboardTasks));
+        }
+
         var tasks = await collaborationTaskQueryService.Handle(new GetCollaborationTasksQuery(boardId), cancellationToken);
         return Ok(TaskCollaborationResourceFromEntityAssembler.ToResources(tasks));
     }

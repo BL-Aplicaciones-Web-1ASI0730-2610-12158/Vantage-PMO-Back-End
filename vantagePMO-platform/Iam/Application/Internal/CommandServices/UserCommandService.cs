@@ -112,6 +112,52 @@ public class UserCommandService(
         }
     }
 
+    public async Task<Result<User>> UpdatePasswordAsync(
+        UpdatePasswordCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(command.Password))
+        {
+            return Result<User>.Failure(
+                IamError.InvalidProfileData,
+                localizer[$"IamError.{nameof(IamError.InvalidProfileData)}"]);
+        }
+
+        var user = await userRepository.FindByIdAsync(command.UserId, cancellationToken);
+        if (user is null)
+        {
+            return Result<User>.Failure(
+                IamError.UserNotFound,
+                localizer[$"IamError.{nameof(IamError.UserNotFound)}"]);
+        }
+
+        try
+        {
+            user.UpdatePasswordHash(hashingService.HashPassword(command.Password));
+            userRepository.Update(user);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<User>.Success(user);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<User>.Failure(
+                IamError.OperationCancelled,
+                localizer[$"IamError.{nameof(IamError.OperationCancelled)}"]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<User>.Failure(
+                IamError.DatabaseError,
+                localizer[$"IamError.{nameof(IamError.DatabaseError)}"]);
+        }
+        catch (Exception)
+        {
+            return Result<User>.Failure(
+                IamError.InternalServerError,
+                localizer[$"IamError.{nameof(IamError.InternalServerError)}"]);
+        }
+    }
+
     private Result MapProfileErrorToSignUpResult(Result<int> profileResult)
     {
         return profileResult.Error switch
