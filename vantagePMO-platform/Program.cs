@@ -134,6 +134,7 @@ builder.Services.AddScoped<AnalyticsSampleDataSeeder>();
 builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
 builder.Services.AddScoped<IMeetingCommandService, MeetingCommandService>();
 builder.Services.AddScoped<IMeetingQueryService, MeetingQueryService>();
+builder.Services.AddScoped<MeetingsSampleDataSeeder>();
 
 var app = builder.Build();
 
@@ -151,6 +152,9 @@ using (var scope = app.Services.CreateScope())
 
     var analyticsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<AnalyticsSampleDataSeeder>();
     await analyticsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var meetingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<MeetingsSampleDataSeeder>();
+    await meetingsSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

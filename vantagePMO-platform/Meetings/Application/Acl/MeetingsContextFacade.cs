@@ -19,7 +19,7 @@ public class MeetingsContextFacade(
             title,
             date,
             time,
-            Duration: string.Empty,
+            Duration: 60,
             Location: string.Empty,
             Type: string.Empty,
             Status: "Scheduled",

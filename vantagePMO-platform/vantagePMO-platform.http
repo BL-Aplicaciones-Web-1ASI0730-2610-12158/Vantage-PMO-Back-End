@@ -65,6 +65,30 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-insights?chatId=pmo-strategic-alignment
 Accept: application/json
 
+### Meetings — list
+GET {{vantagePMO_platform_HostAddress}}/api/v1/meetings
+Accept: application/json
+
+### Meetings — create
+POST {{vantagePMO_platform_HostAddress}}/api/v1/meetings
+Content-Type: application/json
+
+{
+  "title": "Sprint Planning",
+  "segment": "Engineering",
+  "date": "2026-06-20",
+  "time": "10:00",
+  "duration": 60,
+  "location": "Virtual",
+  "type": "Planning",
+  "status": "Upcoming",
+  "organizer": "Alex Sterling",
+  "attendees": ["Alex Sterling", "Sarah Johnson"],
+  "description": "Q2 sprint planning session.",
+  "minutes": [],
+  "agreements": []
+}
+
 ### Quick Reports (Segment 1)
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json
