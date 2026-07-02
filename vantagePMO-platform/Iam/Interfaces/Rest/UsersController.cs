@@ -3,7 +3,10 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
+using vantagePMO_platform.Iam.Application.CommandServices;
 using vantagePMO_platform.Iam.Application.QueryServices;
+using vantagePMO_platform.Iam.Domain.Model;
+using vantagePMO_platform.Iam.Domain.Model.Commands;
 using vantagePMO_platform.Iam.Domain.Model.Queries;
 using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Iam.Interfaces.Rest.Resources;
@@ -29,6 +32,7 @@ namespace vantagePMO_platform.Iam.Interfaces.Rest;
 [SwaggerTag("User and profile endpoints")]
 public class UsersController(
     IUserQueryService userQueryService,
+    IUserCommandService userCommandService,
     IProfileQueryService profileQueryService,
     IProfileCommandService profileCommandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
@@ -59,16 +63,36 @@ public class UsersController(
     }
 
     /// <summary>
-    ///     Returns profiles filtered by email, or all IAM users when no email is supplied.
+    ///     Front-end compatibility: sign-in via query, profile lookup by email, or list users.
     /// </summary>
     [HttpGet]
     [AllowAnonymous]
-    [SwaggerOperation(Summary = "Get profiles by email or list IAM users", OperationId = "GetUsersOrProfiles")]
+    [SwaggerOperation(Summary = "Sign-in, find by email, or list users", OperationId = "GetUsersOrProfiles")]
     [SwaggerResponse(StatusCodes.Status200OK, "Resources were found.")]
     public async Task<IActionResult> GetUsers(
         [FromQuery] string? email,
+        [FromQuery] string? username,
+        [FromQuery] string? password,
         CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+        {
+            return await SignInForFrontAsync(new SignInCommand(username.Trim(), password), email, cancellationToken);
+        }
+
+        if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
+        {
+            var profile = await profileQueryService.Handle(new GetProfileByEmailQuery(email.Trim()), cancellationToken);
+            if (profile is null || profile.UserId <= 0)
+                return Ok(Array.Empty<FrontSignInUserResource>());
+
+            var user = await userQueryService.Handle(new GetUserByIdQuery(profile.UserId), cancellationToken);
+            if (user is null)
+                return Ok(Array.Empty<FrontSignInUserResource>());
+
+            return await SignInForFrontAsync(new SignInCommand(user.Username, password), email.Trim(), cancellationToken);
+        }
+
         if (!string.IsNullOrWhiteSpace(email))
         {
             var profile = await profileQueryService.Handle(new GetProfileByEmailQuery(email), cancellationToken);
@@ -78,10 +102,55 @@ public class UsersController(
             return Ok(new[] { ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile, exposeUserId: true) });
         }
 
-        var getAllUsersQuery = new GetAllUsersQuery();
-        var users = await userQueryService.Handle(getAllUsersQuery, cancellationToken);
+        var users = await userQueryService.Handle(new GetAllUsersQuery(), cancellationToken);
         var userResources = users.Select(UserResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(userResources);
+    }
+
+    /// <summary>
+    ///     Front-end compatibility: register via <c>POST /users</c> (Vue sign-up form).
+    /// </summary>
+    [HttpPost]
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Register user (front-end contract)", OperationId = "RegisterUserForFront")]
+    [SwaggerResponse(StatusCodes.Status201Created, "User created.", typeof(FrontSignInUserResource))]
+    public async Task<IActionResult> RegisterUserForFront(
+        [FromBody] FrontSignUpResource resource,
+        CancellationToken cancellationToken)
+    {
+        var commandResult = FrontSignUpCommandFromResourceAssembler.ToCommandFromResource(resource, errorLocalizer);
+        if (commandResult.IsFailure)
+        {
+            return IamActionResultAssembler.ToActionResultFromSignUpResult(
+                this,
+                Result.Failure(commandResult.Error!, commandResult.Message),
+                errorLocalizer,
+                problemDetailsFactory,
+                () => Ok());
+        }
+
+        var result = await userCommandService.Handle(commandResult.Value!, cancellationToken);
+        if (result.IsFailure)
+        {
+            return IamActionResultAssembler.ToActionResultFromSignUpResult(
+                this,
+                result,
+                errorLocalizer,
+                problemDetailsFactory,
+                () => Ok());
+        }
+
+        var createdUser = await userQueryService.Handle(
+            new GetUserByUsernameQuery(resource.Username.Trim()),
+            cancellationToken);
+
+        if (createdUser is null)
+            return StatusCode(StatusCodes.Status500InternalServerError);
+
+        return CreatedAtAction(
+            nameof(GetProfileByUserId),
+            new { id = createdUser.Id },
+            new FrontSignInUserResource(createdUser.Id, createdUser.Username, resource.Email.Trim()));
     }
 
     /// <summary>
@@ -125,6 +194,30 @@ public class UsersController(
             return Ok(ProfileResourceFromEntityAssembler.ToResourceFromEntity(result.Value!, exposeUserId: true));
 
         return MapErrorToActionResult(result);
+    }
+
+    private async Task<IActionResult> SignInForFrontAsync(
+        SignInCommand command,
+        string? email,
+        CancellationToken cancellationToken)
+    {
+        var result = await userCommandService.Handle(command, cancellationToken);
+        if (result.IsFailure)
+            return Ok(Array.Empty<FrontSignInUserResource>());
+
+        var resolvedEmail = email;
+        if (string.IsNullOrWhiteSpace(resolvedEmail))
+        {
+            var profile = await profileQueryService.Handle(
+                new GetProfileByUserIdQuery(result.Value!.user.Id),
+                cancellationToken);
+            resolvedEmail = profile?.Email.Value;
+        }
+
+        return Ok(new[]
+        {
+            new FrontSignInUserResource(result.Value!.user.Id, result.Value.user.Username, resolvedEmail)
+        });
     }
 
     private IActionResult MapErrorToActionResult(Result<Profile> result)
