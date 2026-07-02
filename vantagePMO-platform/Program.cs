@@ -69,6 +69,12 @@ using vantagePMO_platform.Settings.Application.Internal.QueryServices;
 using vantagePMO_platform.Settings.Application.QueryServices;
 using vantagePMO_platform.Settings.Domain.Repositories;
 using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.SystemAdministration.Application.CommandServices;
+using vantagePMO_platform.SystemAdministration.Application.Internal.CommandServices;
+using vantagePMO_platform.SystemAdministration.Application.Internal.QueryServices;
+using vantagePMO_platform.SystemAdministration.Application.QueryServices;
+using vantagePMO_platform.SystemAdministration.Domain.Repositories;
+using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -210,6 +216,16 @@ builder.Services.AddScoped<IUserSettingsCommandService, UserSettingsCommandServi
 builder.Services.AddScoped<IUserSettingsQueryService, UserSettingsQueryService>();
 builder.Services.AddScoped<SettingsSampleDataSeeder>();
 
+// System Administration bounded context dependency injection.
+builder.Services.AddScoped<IBrandingRepository, BrandingRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IAdminPolicyRepository, AdminPolicyRepository>();
+builder.Services.AddScoped<ISystemSettingsRepository, SystemSettingsRepository>();
+builder.Services.AddScoped<ILoginAttemptRepository, LoginAttemptRepository>();
+builder.Services.AddScoped<ISystemAdministrationCommandService, SystemAdministrationCommandService>();
+builder.Services.AddScoped<ISystemAdministrationQueryService, SystemAdministrationQueryService>();
+builder.Services.AddScoped<SystemAdministrationSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -250,6 +266,9 @@ using (var scope = app.Services.CreateScope())
 
     var settingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SettingsSampleDataSeeder>();
     await settingsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var systemAdministrationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SystemAdministrationSampleDataSeeder>();
+    await systemAdministrationSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

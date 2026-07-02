@@ -243,6 +243,26 @@ Content-Type: application/json
   "updatedAt": "2026-05-14"
 }
 
+### System Administration — branding
+GET {{vantagePMO_platform_HostAddress}}/api/v1/branding
+Accept: application/json
+
+### System Administration — subscription renew
+GET {{vantagePMO_platform_HostAddress}}/api/v1/subscription/1/renew
+Accept: application/json
+
+### System Administration — admin policy
+GET {{vantagePMO_platform_HostAddress}}/api/v1/admin-policy
+Accept: application/json
+
+### System Administration — system settings
+GET {{vantagePMO_platform_HostAddress}}/api/v1/system-settings
+Accept: application/json
+
+### System Administration — login attempts
+GET {{vantagePMO_platform_HostAddress}}/api/v1/login-attempts
+Accept: application/json
+
 ### Quick Reports (Segment 1)
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json
