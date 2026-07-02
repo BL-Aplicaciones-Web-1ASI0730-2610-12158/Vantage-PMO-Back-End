@@ -12,6 +12,7 @@ using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCor
 using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
@@ -76,6 +77,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // System Administration Context
         builder.ApplySystemAdministrationConfiguration();
+
+        // Task Collaboration Context
+        builder.ApplyTaskCollaborationConfiguration();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();

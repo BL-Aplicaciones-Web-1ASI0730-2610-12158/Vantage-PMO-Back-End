@@ -75,6 +75,12 @@ using vantagePMO_platform.SystemAdministration.Application.Internal.QueryService
 using vantagePMO_platform.SystemAdministration.Application.QueryServices;
 using vantagePMO_platform.SystemAdministration.Domain.Repositories;
 using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.TaskCollaboration.Application.CommandServices;
+using vantagePMO_platform.TaskCollaboration.Application.Internal.CommandServices;
+using vantagePMO_platform.TaskCollaboration.Application.Internal.QueryServices;
+using vantagePMO_platform.TaskCollaboration.Application.QueryServices;
+using vantagePMO_platform.TaskCollaboration.Domain.Repositories;
+using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -226,6 +232,16 @@ builder.Services.AddScoped<ISystemAdministrationCommandService, SystemAdministra
 builder.Services.AddScoped<ISystemAdministrationQueryService, SystemAdministrationQueryService>();
 builder.Services.AddScoped<SystemAdministrationSampleDataSeeder>();
 
+// Task Collaboration bounded context dependency injection.
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
+builder.Services.AddScoped<ICollaborationTaskRepository, CollaborationTaskRepository>();
+builder.Services.AddScoped<ICollaborationTaskCommandService, CollaborationTaskCommandService>();
+builder.Services.AddScoped<IBoardQueryService, BoardQueryService>();
+builder.Services.AddScoped<IBoardMemberQueryService, BoardMemberQueryService>();
+builder.Services.AddScoped<ICollaborationTaskQueryService, CollaborationTaskQueryService>();
+builder.Services.AddScoped<TaskCollaborationSampleDataSeeder>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -269,6 +285,9 @@ using (var scope = app.Services.CreateScope())
 
     var systemAdministrationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SystemAdministrationSampleDataSeeder>();
     await systemAdministrationSampleDataSeeder.SeedIfEmptyAsync();
+
+    var taskCollaborationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<TaskCollaborationSampleDataSeeder>();
+    await taskCollaborationSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.

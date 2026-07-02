@@ -21,7 +21,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<DashboardTask>(task =>
         {
-            task.ToTable("tasks");
+            task.ToTable("dashboard_tasks");
             task.HasKey(entity => entity.Id);
             task.Property(entity => entity.Id).ValueGeneratedOnAdd();
             task.Property(entity => entity.Title).HasMaxLength(300).IsRequired();

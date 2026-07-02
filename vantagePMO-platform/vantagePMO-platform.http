@@ -263,6 +263,41 @@ Accept: application/json
 GET {{vantagePMO_platform_HostAddress}}/api/v1/login-attempts
 Accept: application/json
 
+### Task Collaboration — boards
+GET {{vantagePMO_platform_HostAddress}}/api/v1/boards
+Accept: application/json
+
+### Task Collaboration — board members
+GET {{vantagePMO_platform_HostAddress}}/api/v1/board-members?boardId=1
+Accept: application/json
+
+### Task Collaboration — tasks by board
+GET {{vantagePMO_platform_HostAddress}}/api/v1/tasks?boardId=1
+Accept: application/json
+
+### Task Collaboration — create task
+POST {{vantagePMO_platform_HostAddress}}/api/v1/tasks
+Content-Type: application/json
+
+{
+  "boardId": 1,
+  "project": "PROJECT::HORIZON",
+  "title": "Review deployment checklist",
+  "description": "Validate staging rollout steps.",
+  "assignee": "Alex Sterling",
+  "assigneeAvatar": "AS",
+  "assigneeColor": "#3b82f6",
+  "status": "To Do",
+  "priority": "NORMAL",
+  "priorityColor": "#6b7280",
+  "completed": false,
+  "comments": 0,
+  "attachments": 0,
+  "dueDate": "2026-06-20",
+  "progress": 0,
+  "department": "Engineering"
+}
+
 ### Quick Reports (Segment 1)
 GET {{vantagePMO_platform_HostAddress}}/api/v1/reports
 Accept: application/json
