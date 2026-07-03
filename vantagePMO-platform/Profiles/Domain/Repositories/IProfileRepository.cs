@@ -1,8 +1,8 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
-using VantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Shared.Domain.Repositories;
 
-namespace VantagePMO_platform.Profiles.Domain.Repositories;
+namespace vantagePMO_platform.Profiles.Domain.Repositories;
 
 /// <summary>
 ///     Repository abstraction for the <see cref="Profile" /> aggregate.
@@ -24,4 +24,12 @@ public interface IProfileRepository : IBaseRepository<Profile>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns><c>true</c> when a profile with the email exists; otherwise <c>false</c>.</returns>
     Task<bool> ExistsByEmailAsync(EmailAddress email, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Finds a profile by its linked IAM user identifier.
+    /// </summary>
+    /// <param name="userId">The IAM user id.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The matching profile, or <c>null</c> when none exists.</returns>
+    Task<Profile?> FindByUserIdAsync(int userId, CancellationToken cancellationToken = default);
 }

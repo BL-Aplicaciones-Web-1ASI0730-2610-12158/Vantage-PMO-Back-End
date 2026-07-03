@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+namespace vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
 
 /// <summary>
 ///     Value object representing the full display name of a profile owner.

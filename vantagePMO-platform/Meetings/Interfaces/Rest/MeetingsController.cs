@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Meetings.Application.CommandServices;
 using vantagePMO_platform.Meetings.Application.QueryServices;
 using vantagePMO_platform.Meetings.Domain.Model.Queries;
@@ -9,6 +10,7 @@ using vantagePMO_platform.Meetings.Interfaces.Rest.Transform;
 
 namespace vantagePMO_platform.Meetings.Interfaces.Rest;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]

@@ -12,6 +12,18 @@
     <data name="IamError.UsernameAlreadyTaken" xml:space="preserve">
     <value>Username {0} is already taken.</value>
   </data>
+    <data name="IamError.EmailAlreadyRegistered" xml:space="preserve">
+    <value>Email address {0} is already registered.</value>
+  </data>
+    <data name="IamError.InvalidProfileData" xml:space="preserve">
+    <value>Invalid profile data provided.</value>
+  </data>
+    <data name="IamError.InvalidDateOfBirth" xml:space="preserve">
+    <value>Date of birth must use the format {0}.</value>
+  </data>
+    <data name="IamError.PasswordMismatch" xml:space="preserve">
+    <value>Password and confirm password do not match.</value>
+  </data>
     <data name="IamError.InvalidCredentials" xml:space="preserve">
     <value>Invalid username or password.</value>
   </data>
@@ -45,6 +57,22 @@
   </data>
     <data name="ProfilesError.InternalServerError" xml:space="preserve">
     <value>An unexpected internal error occurred in Profiles.</value>
+  </data>
+
+    <data name="ProjectsError.ProjectNotFound" xml:space="preserve">
+    <value>Project not found.</value>
+  </data>
+    <data name="ProjectsError.InvalidProjectData" xml:space="preserve">
+    <value>Invalid project data provided.</value>
+  </data>
+    <data name="ProjectsError.OperationCancelled" xml:space="preserve">
+    <value>Project operation was cancelled.</value>
+  </data>
+    <data name="ProjectsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during project operation.</value>
+  </data>
+    <data name="ProjectsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Projects.</value>
   </data>
 
     <data name="ChatHubError.ChatNotFound" xml:space="preserve">

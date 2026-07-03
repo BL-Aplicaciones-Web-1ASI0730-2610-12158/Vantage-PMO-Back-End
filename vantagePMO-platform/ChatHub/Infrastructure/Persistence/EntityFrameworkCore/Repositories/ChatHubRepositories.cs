@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using vantagePMO_platform.ChatHub.Domain.Model.Aggregates;
 using vantagePMO_platform.ChatHub.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
 namespace vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 

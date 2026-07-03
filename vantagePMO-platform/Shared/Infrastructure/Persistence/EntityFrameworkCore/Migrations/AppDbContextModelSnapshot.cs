@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
 #nullable disable
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -275,6 +275,165 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.ToTable("chat_users", (string)null);
                 });
 
+            modelBuilder.Entity("vantagePMO_platform.Dashboard.Domain.Model.Aggregates.DashboardTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Assignee")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("assignee");
+
+                    b.Property<string>("AvatarSeeds")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("avatar_seeds");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("department");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasColumnName("icon");
+
+                    b.Property<string>("IconBg")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("icon_bg");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_dashboard_tasks");
+
+                    b.ToTable("dashboard_tasks", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Dashboard.Domain.Model.Aggregates.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Percent")
+                        .HasColumnType("int")
+                        .HasColumnName("percent");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_departments");
+
+                    b.ToTable("departments", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Dashboard.Domain.Model.Aggregates.ScheduleItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("active");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("detail");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int")
+                        .HasColumnName("duration");
+
+                    b.Property<string>("Time")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("time");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("title");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_schedules");
+
+                    b.ToTable("schedules", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Iam.Domain.Model.Aggregates.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("password_hash");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_users");
+
+                    b.ToTable("users");
+                });
+
             modelBuilder.Entity("vantagePMO_platform.Meetings.Domain.Model.Aggregates.Meeting", b =>
                 {
                     b.Property<int>("Id")
@@ -357,7 +516,51 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.ToTable("meetings", (string)null);
                 });
 
-            modelBuilder.Entity("VantagePMO_platform.Profiles.Domain.Model.Aggregates.Profile", b =>
+            modelBuilder.Entity("vantagePMO_platform.Profiles.Domain.Model.Aggregates.Endorsement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AuthorAvatarSeed")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("author_avatar_seed");
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("author_name");
+
+                    b.Property<string>("AuthorRole")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("author_role");
+
+                    b.Property<string>("Quote")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("quote");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_endorsements");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("i_x_endorsements_user_id");
+
+                    b.ToTable("endorsements");
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Profiles.Domain.Model.Aggregates.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -401,6 +604,10 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
 
                     b.Property<string>("DeliveryRate")
                         .IsRequired()
@@ -460,6 +667,10 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .HasColumnType("datetime")
                         .HasColumnName("updated_at");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
                     b.Property<string>("YearsActive")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -473,7 +684,175 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .IsUnique()
                         .HasDatabaseName("i_x_profiles_email");
 
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_profiles_user_id");
+
                     b.ToTable("profiles");
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Profiles.Domain.Model.Aggregates.ProfileSkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int")
+                        .HasColumnName("percentage");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_profile_skills");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("i_x_profile_skills_user_id");
+
+                    b.ToTable("profile_skills");
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Profiles.Domain.Model.Aggregates.ProfileStats", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AtRisk")
+                        .HasColumnType("int")
+                        .HasColumnName("at_risk");
+
+                    b.Property<int>("AttentionItems")
+                        .HasColumnType("int")
+                        .HasColumnName("attention_items");
+
+                    b.Property<int>("OnTrack")
+                        .HasColumnType("int")
+                        .HasColumnName("on_track");
+
+                    b.Property<string>("PortfolioHealth")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("portfolio_health");
+
+                    b.Property<int>("TotalProjects")
+                        .HasColumnType("int")
+                        .HasColumnName("total_projects");
+
+                    b.Property<int>("Trend")
+                        .HasColumnType("int")
+                        .HasColumnName("trend");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_profile_stats");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_profile_stats_user_id");
+
+                    b.ToTable("profile_stats");
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.Projects.Domain.Model.Aggregates.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("category");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("DueDate")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasColumnName("due_date");
+
+                    b.Property<string>("EndDate")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("end_date");
+
+                    b.Property<string>("Manager")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("manager");
+
+                    b.Property<string>("Milestones")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("milestones");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int")
+                        .HasColumnName("progress");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("start_date");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TeamMembers")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("team_members");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_projects");
+
+                    b.ToTable("projects");
                 });
 
             modelBuilder.Entity("vantagePMO_platform.Reports.Domain.Model.Aggregates.Report", b =>
@@ -584,6 +963,134 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.ToTable("reports", (string)null);
                 });
 
+            modelBuilder.Entity("vantagePMO_platform.Settings.Domain.Model.Aggregates.UserSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AccentColor")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("accent_color");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("bio");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("currency");
+
+                    b.Property<string>("DateFormat")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("date_format");
+
+                    b.Property<string>("Density")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("density");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasColumnName("department");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("display_name");
+
+                    b.Property<bool>("EmailNotifications")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("email_notifications");
+
+                    b.Property<string>("FirstDayOfWeek")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("first_day_of_week");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("job_title");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("language");
+
+                    b.Property<bool>("MentionAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("mention_alerts");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("phone");
+
+                    b.Property<string>("ProfileVisibility")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("profile_visibility");
+
+                    b.Property<bool>("PushNotifications")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("push_notifications");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("theme");
+
+                    b.Property<string>("TimeFormat")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("time_format");
+
+                    b.Property<string>("Timezone")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("timezone");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("two_factor_enabled");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("updated_at");
+
+                    b.Property<bool>("WeeklyDigest")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("weekly_digest");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_user_settings");
+
+                    b.ToTable("user_settings", (string)null);
+                });
+
             modelBuilder.Entity("vantagePMO_platform.Support.Domain.Model.Aggregates.SupportTicket", b =>
                 {
                     b.Property<int>("Id")
@@ -637,6 +1144,492 @@ namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .HasName("p_k_support_tickets");
 
                     b.ToTable("support_tickets", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.SystemAdministration.Domain.Model.Aggregates.AdminPolicy", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("AllowedDevices")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("allowed_devices");
+
+                    b.Property<bool>("ApiProtection")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("api_protection");
+
+                    b.Property<int>("ApiRequestLimits")
+                        .HasColumnType("int")
+                        .HasColumnName("api_request_limits");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("created_at");
+
+                    b.Property<bool>("EncryptedPasswords")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("encrypted_passwords");
+
+                    b.Property<bool>("IpRestriction")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("ip_restriction");
+
+                    b.Property<bool>("JwtEnabled")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("jwt_enabled");
+
+                    b.Property<bool>("MfaRequired")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("mfa_required");
+
+                    b.Property<int>("MinimumPasswordLength")
+                        .HasColumnType("int")
+                        .HasColumnName("minimum_password_length");
+
+                    b.Property<bool>("NotificationPermissions")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("notification_permissions");
+
+                    b.Property<string>("PasswordExpiration")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("password_expiration");
+
+                    b.Property<string>("PasswordPolicy")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("password_policy");
+
+                    b.Property<bool>("RequireSymbols")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("require_symbols");
+
+                    b.Property<bool>("RequireUppercase")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("require_uppercase");
+
+                    b.Property<int>("SessionTimeout")
+                        .HasColumnType("int")
+                        .HasColumnName("session_timeout");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_admin_policies");
+
+                    b.ToTable("admin_policies", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.SystemAdministration.Domain.Model.Aggregates.Branding", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CompanyDescription")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("company_description");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("company_name");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("logo_url");
+
+                    b.Property<string>("PrimaryColor")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("primary_color");
+
+                    b.Property<string>("SecondaryColor")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("secondary_color");
+
+                    b.Property<string>("TypographyStyle")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)")
+                        .HasColumnName("typography_style");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_brandings");
+
+                    b.ToTable("brandings", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.SystemAdministration.Domain.Model.Aggregates.LoginAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Timestamp")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("timestamp");
+
+                    b.Property<string>("User")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("user");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_login_attempts");
+
+                    b.ToTable("login_attempts", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.SystemAdministration.Domain.Model.Aggregates.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("ActiveUsers")
+                        .HasColumnType("int")
+                        .HasColumnName("active_users");
+
+                    b.Property<string>("BillingCycle")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("billing_cycle");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("ExpirationDate")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("expiration_date");
+
+                    b.Property<string>("Plan")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("plan");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_subscriptions");
+
+                    b.ToTable("subscriptions", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.SystemAdministration.Domain.Model.Aggregates.SystemSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("AdminAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("admin_alerts");
+
+                    b.Property<bool>("BrowserPush")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("browser_push");
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("created_at");
+
+                    b.Property<bool>("DeadlineReminders")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("deadline_reminders");
+
+                    b.Property<bool>("EmailNotifications")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("email_notifications");
+
+                    b.Property<bool>("MentionNotifications")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("mention_notifications");
+
+                    b.Property<bool>("MobilePush")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("mobile_push");
+
+                    b.Property<bool>("ProjectAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("project_alerts");
+
+                    b.Property<bool>("PushNotifications")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("push_notifications");
+
+                    b.Property<bool>("ReportAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("report_alerts");
+
+                    b.Property<bool>("SecurityAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("security_alerts");
+
+                    b.Property<bool>("SoundAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("sound_alerts");
+
+                    b.Property<bool>("SubscriptionAlerts")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("subscription_alerts");
+
+                    b.Property<bool>("TeamActivity")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("team_activity");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("updated_at");
+
+                    b.Property<bool>("WeeklyDigest")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("weekly_digest");
+
+                    b.Property<bool>("WorkspaceUpdates")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("workspace_updates");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_system_settings");
+
+                    b.ToTable("system_settings", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.TaskCollaboration.Domain.Model.Aggregates.Board", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("ProjectsActive")
+                        .HasColumnType("int")
+                        .HasColumnName("projects_active");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_boards");
+
+                    b.ToTable("boards", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.TaskCollaboration.Domain.Model.Aggregates.BoardMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("avatar");
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int")
+                        .HasColumnName("board_id");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("color");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("role");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_board_members");
+
+                    b.ToTable("board_members", (string)null);
+                });
+
+            modelBuilder.Entity("vantagePMO_platform.TaskCollaboration.Domain.Model.Aggregates.CollaborationTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Assignee")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("assignee");
+
+                    b.Property<string>("AssigneeAvatar")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("assignee_avatar");
+
+                    b.Property<string>("AssigneeColor")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("assignee_color");
+
+                    b.Property<int>("Attachments")
+                        .HasColumnType("int")
+                        .HasColumnName("attachments");
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int")
+                        .HasColumnName("board_id");
+
+                    b.Property<int>("Comments")
+                        .HasColumnType("int")
+                        .HasColumnName("comments");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("completed");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("department");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("DueDate")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("due_date");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("priority");
+
+                    b.Property<string>("PriorityColor")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("priority_color");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int")
+                        .HasColumnName("progress");
+
+                    b.Property<string>("Project")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("project");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_collaboration_tasks");
+
+                    b.ToTable("collaboration_tasks", (string)null);
                 });
 #pragma warning restore 612, 618
         }

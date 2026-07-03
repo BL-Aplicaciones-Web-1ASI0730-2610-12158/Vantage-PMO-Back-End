@@ -3,16 +3,38 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using VantagePMO_platform.Profiles.Application.Internal.CommandServices;
-using VantagePMO_platform.Profiles.Application.Internal.QueryServices;
-using VantagePMO_platform.Profiles.Domain.Repositories;
-using VantagePMO_platform.Profiles.Domain.Services;
-using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-using vantagePMO_platform.Analytics.Application.Internal.CommandServices;
-using vantagePMO_platform.Analytics.Application.Internal.QueryServices;
-using vantagePMO_platform.Analytics.Application.QueryServices;
-using vantagePMO_platform.Analytics.Domain.Repositories;
-using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Iam.Application.Acl;
+using vantagePMO_platform.Iam.Application.CommandServices;
+using vantagePMO_platform.Iam.Application.Internal.CommandServices;
+using vantagePMO_platform.Iam.Application.Internal.OutboundServices;
+using vantagePMO_platform.Iam.Application.Internal.QueryServices;
+using vantagePMO_platform.Iam.Application.QueryServices;
+using vantagePMO_platform.Iam.Domain.Repositories;
+using vantagePMO_platform.Iam.Infrastructure.Hashing.BCrypt.Services;
+using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Extensions;
+using vantagePMO_platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using vantagePMO_platform.Iam.Infrastructure.Tokens.Jwt.Services;
+using vantagePMO_platform.Iam.Interfaces.Acl;
+using vantagePMO_platform.Profiles.Application.Acl;
+using vantagePMO_platform.Profiles.Application.CommandServices;
+using vantagePMO_platform.Profiles.Application.Internal.CommandServices;
+using vantagePMO_platform.Profiles.Application.Internal.QueryServices;
+using vantagePMO_platform.Profiles.Application.QueryServices;
+using vantagePMO_platform.Profiles.Domain.Repositories;
+using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Profiles.Interfaces.Acl;
+using vantagePMO_platform.Projects.Application.CommandServices;
+using vantagePMO_platform.Projects.Application.Internal.CommandServices;
+using vantagePMO_platform.Projects.Application.Internal.QueryServices;
+using vantagePMO_platform.Projects.Application.QueryServices;
+using vantagePMO_platform.Projects.Domain.Repositories;
+using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Dashboard.Application.Internal.CommandServices;
+using vantagePMO_platform.Dashboard.Application.Internal.QueryServices;
+using vantagePMO_platform.Dashboard.Domain.Repositories;
+using vantagePMO_platform.Dashboard.Application.QueryServices;
+using vantagePMO_platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.ChatHub.Application.CommandServices;
 using vantagePMO_platform.ChatHub.Application.Internal.CommandServices;
 using vantagePMO_platform.ChatHub.Application.Internal.QueryServices;
@@ -24,31 +46,46 @@ using vantagePMO_platform.Reports.Application.Internal.QueryServices;
 using vantagePMO_platform.Reports.Application.QueryServices;
 using vantagePMO_platform.Reports.Domain.Repositories;
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Analytics.Application.Internal.CommandServices;
+using vantagePMO_platform.Analytics.Application.Internal.QueryServices;
+using vantagePMO_platform.Analytics.Application.QueryServices;
+using vantagePMO_platform.Analytics.Domain.Repositories;
+using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Meetings.Application.CommandServices;
 using vantagePMO_platform.Meetings.Application.Internal.CommandServices;
 using vantagePMO_platform.Meetings.Application.Internal.QueryServices;
 using vantagePMO_platform.Meetings.Application.QueryServices;
 using vantagePMO_platform.Meetings.Domain.Repositories;
 using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-<<<<<<< HEAD
-using VantagePMO_platform.Shared.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
-=======
 using vantagePMO_platform.Support.Application.CommandServices;
 using vantagePMO_platform.Support.Application.Internal.CommandServices;
 using vantagePMO_platform.Support.Application.Internal.QueryServices;
 using vantagePMO_platform.Support.Application.QueryServices;
 using vantagePMO_platform.Support.Domain.Repositories;
 using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Settings.Application.CommandServices;
+using vantagePMO_platform.Settings.Application.Internal.CommandServices;
+using vantagePMO_platform.Settings.Application.Internal.QueryServices;
+using vantagePMO_platform.Settings.Application.QueryServices;
+using vantagePMO_platform.Settings.Domain.Repositories;
+using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.SystemAdministration.Application.CommandServices;
+using vantagePMO_platform.SystemAdministration.Application.Internal.CommandServices;
+using vantagePMO_platform.SystemAdministration.Application.Internal.QueryServices;
+using vantagePMO_platform.SystemAdministration.Application.QueryServices;
+using vantagePMO_platform.SystemAdministration.Domain.Repositories;
+using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.TaskCollaboration.Application.CommandServices;
+using vantagePMO_platform.TaskCollaboration.Application.Internal.CommandServices;
+using vantagePMO_platform.TaskCollaboration.Application.Internal.QueryServices;
+using vantagePMO_platform.TaskCollaboration.Application.QueryServices;
+using vantagePMO_platform.TaskCollaboration.Domain.Repositories;
+using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
->>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,12 +149,35 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared dependency injection.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<VantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
+builder.Services.AddScoped<vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
 
 // Profiles bounded context dependency injection.
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileStatsRepository, ProfileStatsRepository>();
+builder.Services.AddScoped<IProfileSkillRepository, ProfileSkillRepository>();
+builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
 builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
 builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
+builder.Services.AddScoped<IProfileStatsQueryService, ProfileStatsQueryService>();
+builder.Services.AddScoped<IProfileSkillQueryService, ProfileSkillQueryService>();
+builder.Services.AddScoped<IEndorsementQueryService, EndorsementQueryService>();
+builder.Services.AddScoped<ProfileRelatedDataSeeder>();
+builder.Services.AddScoped<IProfilesContextFacade, ProfilesContextFacade>();
+
+// Projects bounded context dependency injection.
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectCommandService, ProjectCommandService>();
+builder.Services.AddScoped<IProjectQueryService, ProjectQueryService>();
+builder.Services.AddScoped<ProjectsSampleDataSeeder>();
+
+// Dashboard bounded context dependency injection.
+builder.Services.AddScoped<IDashboardTaskRepository, DashboardTaskRepository>();
+builder.Services.AddScoped<IScheduleItemRepository, ScheduleItemRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDashboardTaskQueryService, DashboardTaskQueryService>();
+builder.Services.AddScoped<IScheduleItemQueryService, ScheduleItemQueryService>();
+builder.Services.AddScoped<IDepartmentQueryService, DepartmentQueryService>();
+builder.Services.AddScoped<DashboardSampleDataSeeder>();
 
 // Chat Hub bounded context dependency injection.
 builder.Services.AddScoped<IChatUserRepository, ChatUserRepository>();
@@ -150,13 +210,37 @@ builder.Services.AddScoped<IMeetingCommandService, MeetingCommandService>();
 builder.Services.AddScoped<IMeetingQueryService, MeetingQueryService>();
 builder.Services.AddScoped<MeetingsSampleDataSeeder>();
 
-<<<<<<< HEAD
-=======
 // Support bounded context dependency injection.
 builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddScoped<ISupportTicketCommandService, SupportTicketCommandService>();
 builder.Services.AddScoped<ISupportTicketQueryService, SupportTicketQueryService>();
 builder.Services.AddScoped<SupportSampleDataSeeder>();
+
+// Settings bounded context dependency injection.
+builder.Services.AddScoped<IUserSettingsRepository, UserSettingsRepository>();
+builder.Services.AddScoped<IUserSettingsCommandService, UserSettingsCommandService>();
+builder.Services.AddScoped<IUserSettingsQueryService, UserSettingsQueryService>();
+builder.Services.AddScoped<SettingsSampleDataSeeder>();
+
+// System Administration bounded context dependency injection.
+builder.Services.AddScoped<IBrandingRepository, BrandingRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IAdminPolicyRepository, AdminPolicyRepository>();
+builder.Services.AddScoped<ISystemSettingsRepository, SystemSettingsRepository>();
+builder.Services.AddScoped<ILoginAttemptRepository, LoginAttemptRepository>();
+builder.Services.AddScoped<ISystemAdministrationCommandService, SystemAdministrationCommandService>();
+builder.Services.AddScoped<ISystemAdministrationQueryService, SystemAdministrationQueryService>();
+builder.Services.AddScoped<SystemAdministrationSampleDataSeeder>();
+
+// Task Collaboration bounded context dependency injection.
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
+builder.Services.AddScoped<ICollaborationTaskRepository, CollaborationTaskRepository>();
+builder.Services.AddScoped<ICollaborationTaskCommandService, CollaborationTaskCommandService>();
+builder.Services.AddScoped<IBoardQueryService, BoardQueryService>();
+builder.Services.AddScoped<IBoardMemberQueryService, BoardMemberQueryService>();
+builder.Services.AddScoped<ICollaborationTaskQueryService, CollaborationTaskQueryService>();
+builder.Services.AddScoped<TaskCollaborationSampleDataSeeder>();
 
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
@@ -167,7 +251,6 @@ builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
->>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
 var app = builder.Build();
 
 // Apply pending migrations at startup.
@@ -175,6 +258,12 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
+
+    var projectsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ProjectsSampleDataSeeder>();
+    await projectsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var dashboardSampleDataSeeder = scope.ServiceProvider.GetRequiredService<DashboardSampleDataSeeder>();
+    await dashboardSampleDataSeeder.SeedIfEmptyAsync();
 
     var chatHubSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ChatHubSampleDataSeeder>();
     await chatHubSampleDataSeeder.SeedIfEmptyAsync();
@@ -190,6 +279,15 @@ using (var scope = app.Services.CreateScope())
 
     var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
     await supportSampleDataSeeder.SeedIfEmptyAsync();
+
+    var settingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SettingsSampleDataSeeder>();
+    await settingsSampleDataSeeder.SeedIfEmptyAsync();
+
+    var systemAdministrationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SystemAdministrationSampleDataSeeder>();
+    await systemAdministrationSampleDataSeeder.SeedIfEmptyAsync();
+
+    var taskCollaborationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<TaskCollaborationSampleDataSeeder>();
+    await taskCollaborationSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
@@ -205,7 +303,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors();
+app.UseRequestAuthorization();
 app.UseAuthorization();
 app.MapControllers();
 

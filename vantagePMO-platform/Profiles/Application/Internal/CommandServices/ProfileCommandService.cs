@@ -1,16 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using VantagePMO_platform.Profiles.Application.Errors;
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
-using VantagePMO_platform.Profiles.Domain.Repositories;
-using VantagePMO_platform.Profiles.Domain.Services;
-using VantagePMO_platform.Shared.Application.Model;
-using VantagePMO_platform.Shared.Domain.Repositories;
-using VantagePMO_platform.Shared.Resources.Errors;
+using vantagePMO_platform.Profiles.Domain.Model;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+using vantagePMO_platform.Profiles.Domain.Repositories;
+using vantagePMO_platform.Profiles.Application.CommandServices;
+using vantagePMO_platform.Shared.Application.Model;
+using vantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Resources.Errors;
 
-namespace VantagePMO_platform.Profiles.Application.Internal.CommandServices;
+namespace vantagePMO_platform.Profiles.Application.Internal.CommandServices;
 
 /// <summary>
 ///     Command service handling the write operations of the Profiles bounded context.
@@ -22,7 +22,7 @@ public class ProfileCommandService(
     ILogger<ProfileCommandService> logger) : IProfileCommandService
 {
     /// <inheritdoc />
-    public async Task<Result<Profile>> Handle(CreateProfileCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Profile>> CreateProfile(CreateProfileCommand command, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -46,10 +46,16 @@ public class ProfileCommandService(
                     localizer["ProfilesError.EmailAlreadyRegistered", profile.Email.Value]);
             }
 
-            await profileRepository.AddAsync(profile, cancellationToken);
-            await unitOfWork.CompleteAsync(cancellationToken);
+            if (await profileRepository.FindByUserIdAsync(command.UserId, cancellationToken) is not null)
+            {
+                return Result<Profile>.Failure(
+                    ProfilesError.InvalidProfileData,
+                    localizer["ProfilesError.InvalidProfileData"]);
+            }
 
-            logger.LogInformation("Profile {ProfileId} created.", profile.Id);
+            await profileRepository.AddAsync(profile, cancellationToken);
+
+            logger.LogInformation("Profile {ProfileId} staged for creation.", profile.Id);
             return Result<Profile>.Success(profile);
         }
         catch (OperationCanceledException)

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace VantagePMO_platform.Profiles.Domain.Model.ValueObjects;
+namespace vantagePMO_platform.Profiles.Domain.Model.ValueObjects;
 
 /// <summary>
 ///     Value object representing a syntactically valid email address.

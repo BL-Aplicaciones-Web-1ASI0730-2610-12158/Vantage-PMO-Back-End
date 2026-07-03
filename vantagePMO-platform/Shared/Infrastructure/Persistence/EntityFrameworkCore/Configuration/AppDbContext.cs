@@ -1,17 +1,20 @@
-using VantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Profiles.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Projects.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Dashboard.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.ChatHub.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-<<<<<<< HEAD
 using vantagePMO_platform.Reports.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using vantagePMO_platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
-=======
+using vantagePMO_platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Support.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
->>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
+using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
 /// <summary>
 ///     Application database context for the Learning Center Platform
@@ -45,6 +48,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Profiles Context
         builder.ApplyProfilesConfiguration();
 
+        // Projects Context
+        builder.ApplyProjectsConfiguration();
+
+        // Dashboard Context
+        builder.ApplyDashboardConfiguration();
+
         // Chat Hub Context
         builder.ApplyChatHubConfiguration();
 
@@ -54,16 +63,23 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Analytics Context
         builder.ApplyAnalyticsConfiguration();
 
+        // IAM Context
+        builder.ApplyIamConfiguration();
+        
         // Meetings Context
         builder.ApplyMeetingsConfiguration();
 
-<<<<<<< HEAD
-        // IAM Context
-        // builder.ApplyIamConfiguration(); // TODO: enable when the IAM bounded context is implemented.
-=======
         // Support Context
         builder.ApplySupportConfiguration();
->>>>>>> 737dbac (feat(support): add support-tickets endpoints with sample seeder)
+
+        // Settings Context
+        builder.ApplySettingsConfiguration();
+
+        // System Administration Context
+        builder.ApplySystemAdministrationConfiguration();
+
+        // Task Collaboration Context
+        builder.ApplyTaskCollaborationConfiguration();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();

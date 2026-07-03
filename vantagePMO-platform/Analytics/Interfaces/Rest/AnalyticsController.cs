@@ -5,9 +5,11 @@ using vantagePMO_platform.Analytics.Application.QueryServices;
 using vantagePMO_platform.Analytics.Domain.Model.Queries;
 using vantagePMO_platform.Analytics.Interfaces.Rest.Resources;
 using vantagePMO_platform.Analytics.Interfaces.Rest.Transform;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace vantagePMO_platform.Analytics.Interfaces.Rest;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/analytics")]
 [Produces(MediaTypeNames.Application.Json)]

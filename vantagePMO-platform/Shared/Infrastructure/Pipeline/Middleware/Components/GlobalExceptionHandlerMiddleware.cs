@@ -1,13 +1,13 @@
 using System.Net.Mime;
 using System.Text.Json;
-using VantagePMO_platform.Shared.Resources.Errors;
-using VantagePMO_platform.Shared.Resources;
+using vantagePMO_platform.Shared.Resources.Errors;
+using vantagePMO_platform.Shared.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
 // For OperationCanceledException
 
-namespace VantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Components;
+namespace vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Components;
 
 /// <summary>
 ///     Global Exception Handling Middleware

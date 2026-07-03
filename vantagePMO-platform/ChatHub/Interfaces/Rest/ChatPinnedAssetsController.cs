@@ -5,9 +5,11 @@ using vantagePMO_platform.ChatHub.Application.QueryServices;
 using vantagePMO_platform.ChatHub.Domain.Model.Queries;
 using vantagePMO_platform.ChatHub.Interfaces.Rest.Resources;
 using vantagePMO_platform.ChatHub.Interfaces.Rest.Transform;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace vantagePMO_platform.ChatHub.Interfaces.Rest;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/chat-pinned-assets")]
 [Produces(MediaTypeNames.Application.Json)]

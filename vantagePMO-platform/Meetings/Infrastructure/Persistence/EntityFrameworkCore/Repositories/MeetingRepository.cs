@@ -1,7 +1,7 @@
 using vantagePMO_platform.Meetings.Domain.Model.Aggregates;
 using vantagePMO_platform.Meetings.Domain.Repositories;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
-using VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 namespace vantagePMO_platform.Meetings.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 

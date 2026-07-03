@@ -1,30 +1,27 @@
 @vantagePMO_platform_HostAddress = http://localhost:5278
 
-### Create a profile (201 Created, 409 if email duplicated, 400 if invalid)
-POST {{vantagePMO_platform_HostAddress}}/api/v1/profiles
+### Sign up (creates user + profile)
+POST {{vantagePMO_platform_HostAddress}}/api/v1/authentication/sign-up
 Content-Type: application/json
 Accept-Language: es
 
 {
-  "name": "Alex Sterling",
+  "fullName": "Alex Sterling",
+  "username": "alex.sterling",
+  "role": "Project Manager",
+  "dateOfBirth": "15/03/1990",
   "email": "alex.sterling@vantagepmo.io",
-  "role": "Precision Lead",
-  "department": "Executive",
-  "joined": "January 2022",
-  "avatarSeed": "Alex",
-  "availability": "AVAILABLE FOR CONSULT",
-  "experience": "8+ Years",
-  "deliveryRate": "95%",
-  "activeBudget": "$2.8M",
-  "bio": [
-    "Alex Sterling is a Precision Lead specializing in portfolio management.",
-    "Delivers complex projects on schedule with strategic oversight."
-  ],
-  "certifications": ["PMP Certified", "SAFe Agilist", "CSM"],
-  "skillsDescription": "Aligns stakeholder expectations with delivery timelines.",
-  "location": "New York, US",
-  "yearsActive": "4 Years at Vantage PMO",
-  "availabilityLabel": "Accepting New Leads"
+  "password": "Secret123!",
+  "confirmPassword": "Secret123!"
+}
+
+### Sign in (200 OK, 400 if invalid credentials)
+POST {{vantagePMO_platform_HostAddress}}/api/v1/authentication/sign-in
+Content-Type: application/json
+
+{
+  "username": "alex.sterling",
+  "password": "Secret123!"
 }
 
 ### Get a profile by id (200 OK, 404 if not found)
@@ -40,10 +37,102 @@ PATCH {{vantagePMO_platform_HostAddress}}/api/v1/profiles/1
 Content-Type: application/json
 
 {
-  "role": "Senior Precision Lead",
-  "availabilityLabel": "Fully Booked",
-  "certifications": ["PMP Certified", "SAFe Agilist", "CSM", "PMI-ACP"]
+  "role": "Senior Project Manager",
+  "availabilityLabel": "Fully Booked"
 }
+
+### Frontend contract — get profile by user id
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Accept: application/json
+
+### Frontend contract — get profile by email (returns array)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/users?email=alex.sterling@vantagepmo.io
+Accept: application/json
+
+### Frontend contract — update profile by user id
+PATCH {{vantagePMO_platform_HostAddress}}/api/v1/users/1
+Content-Type: application/json
+
+{
+  "role": "Senior Project Manager",
+  "location": "London, UK",
+  "bio": ["Updated biography paragraph."]
+}
+
+### Frontend contract — profile stats
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats?userId=1
+Accept: application/json
+
+### Frontend contract — profile skills
+GET {{vantagePMO_platform_HostAddress}}/api/v1/profile-skills?userId=1
+Accept: application/json
+
+### Frontend contract — endorsements
+GET {{vantagePMO_platform_HostAddress}}/api/v1/endorsements?userId=1
+Accept: application/json
+
+### Get all projects
+GET {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Accept: application/json
+
+### Create a project
+POST {{vantagePMO_platform_HostAddress}}/api/v1/projects
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Mixed-use development with retail, residential, and office components.",
+  "status": "healthy",
+  "progress": 0,
+  "startDate": "2026-01-15",
+  "dueDate": "2026-12-31",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" }
+  ],
+  "milestones": []
+}
+
+### Update a project
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/projects/1
+Content-Type: application/json
+
+{
+  "name": "Aura Mixed-Use",
+  "category": "Commercial Real Estate",
+  "description": "Updated mixed-use development scope.",
+  "status": "at-risk",
+  "progress": 64,
+  "startDate": "2026-01-15",
+  "dueDate": "Delayed: Supply",
+  "manager": "Alex Sterling",
+  "userId": 1,
+  "teamMembers": [
+    { "id": 1, "name": "Alexander", "avatar": "A" },
+    { "id": 2, "name": "Benjamin", "avatar": "B" }
+  ],
+  "milestones": [
+    { "id": 1, "name": "Final Audit Submission", "date": "Oct 14", "type": "warning" }
+  ]
+}
+
+### Dashboard — priority tasks
+GET {{vantagePMO_platform_HostAddress}}/api/v1/tasks
+Accept: application/json
+
+### Dashboard — schedule
+GET {{vantagePMO_platform_HostAddress}}/api/v1/schedule
+Accept: application/json
+
+### Dashboard — departments
+GET {{vantagePMO_platform_HostAddress}}/api/v1/departments
+Accept: application/json
+
+### Dashboard — portfolio stats (no userId)
+GET {{vantagePMO_platform_HostAddress}}/api/v1/stats
+Accept: application/json
 
 ### Chat Hub — users
 GET {{vantagePMO_platform_HostAddress}}/api/v1/chat-users
@@ -119,6 +208,94 @@ Content-Type: application/json
   "status": "In Progress",
   "createdAt": "2026-05-10",
   "assignee": "Support Team"
+}
+
+### User Settings — get
+GET {{vantagePMO_platform_HostAddress}}/api/v1/user-settings
+Accept: application/json
+
+### User Settings — update
+PUT {{vantagePMO_platform_HostAddress}}/api/v1/user-settings
+Content-Type: application/json
+
+{
+  "id": 1,
+  "theme": "dark",
+  "language": "es",
+  "timezone": "America/Bogota",
+  "dateFormat": "DD/MM/YYYY",
+  "timeFormat": "24h",
+  "firstDayOfWeek": "Monday",
+  "currency": "USD",
+  "accentColor": "#8b5cf6",
+  "density": "comfortable",
+  "emailNotifications": true,
+  "pushNotifications": false,
+  "weeklyDigest": false,
+  "mentionAlerts": true,
+  "twoFactorEnabled": false,
+  "profileVisibility": "team",
+  "displayName": "Alex Sterling",
+  "jobTitle": "Lead Architect",
+  "bio": "Precision-driven PMO leader with a focus on strategic execution and team performance.",
+  "phone": "+1 (555) 234-5678",
+  "department": "Executive",
+  "updatedAt": "2026-05-14"
+}
+
+### System Administration — branding
+GET {{vantagePMO_platform_HostAddress}}/api/v1/branding
+Accept: application/json
+
+### System Administration — subscription renew
+GET {{vantagePMO_platform_HostAddress}}/api/v1/subscription/1/renew
+Accept: application/json
+
+### System Administration — admin policy
+GET {{vantagePMO_platform_HostAddress}}/api/v1/admin-policy
+Accept: application/json
+
+### System Administration — system settings
+GET {{vantagePMO_platform_HostAddress}}/api/v1/system-settings
+Accept: application/json
+
+### System Administration — login attempts
+GET {{vantagePMO_platform_HostAddress}}/api/v1/login-attempts
+Accept: application/json
+
+### Task Collaboration — boards
+GET {{vantagePMO_platform_HostAddress}}/api/v1/boards
+Accept: application/json
+
+### Task Collaboration — board members
+GET {{vantagePMO_platform_HostAddress}}/api/v1/board-members?boardId=1
+Accept: application/json
+
+### Task Collaboration — tasks by board
+GET {{vantagePMO_platform_HostAddress}}/api/v1/tasks?boardId=1
+Accept: application/json
+
+### Task Collaboration — create task
+POST {{vantagePMO_platform_HostAddress}}/api/v1/tasks
+Content-Type: application/json
+
+{
+  "boardId": 1,
+  "project": "PROJECT::HORIZON",
+  "title": "Review deployment checklist",
+  "description": "Validate staging rollout steps.",
+  "assignee": "Alex Sterling",
+  "assigneeAvatar": "AS",
+  "assigneeColor": "#3b82f6",
+  "status": "To Do",
+  "priority": "NORMAL",
+  "priorityColor": "#6b7280",
+  "completed": false,
+  "comments": 0,
+  "attachments": 0,
+  "dueDate": "2026-06-20",
+  "progress": 0,
+  "department": "Engineering"
 }
 
 ### Quick Reports (Segment 1)

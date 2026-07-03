@@ -2,7 +2,7 @@ using vantagePMO_platform.Meetings.Domain.Model.Aggregates;
 using vantagePMO_platform.Meetings.Domain.Model.Commands;
 using vantagePMO_platform.Meetings.Domain.Model.ValueObjects;
 using vantagePMO_platform.Meetings.Domain.Repositories;
-using VantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Domain.Repositories;
 
 namespace vantagePMO_platform.Meetings.Application.Internal.CommandServices;
 

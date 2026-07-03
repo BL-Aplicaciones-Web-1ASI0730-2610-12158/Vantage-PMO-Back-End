@@ -1,5 +1,5 @@
 using vantagePMO_platform.Meetings.Domain.Model.Aggregates;
-using VantagePMO_platform.Shared.Domain.Repositories;
+using vantagePMO_platform.Shared.Domain.Repositories;
 
 namespace vantagePMO_platform.Meetings.Domain.Repositories;
 

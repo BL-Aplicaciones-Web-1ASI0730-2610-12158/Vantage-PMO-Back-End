@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace VantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
+namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
     public partial class UpdateMeetingsContract : Migration

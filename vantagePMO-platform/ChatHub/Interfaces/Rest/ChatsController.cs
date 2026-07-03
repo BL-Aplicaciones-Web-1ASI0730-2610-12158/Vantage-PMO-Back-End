@@ -8,11 +8,13 @@ using vantagePMO_platform.ChatHub.Domain.Model.Aggregates;
 using vantagePMO_platform.ChatHub.Domain.Model.Queries;
 using vantagePMO_platform.ChatHub.Interfaces.Rest.Resources;
 using vantagePMO_platform.ChatHub.Interfaces.Rest.Transform;
-using VantagePMO_platform.Shared.Application.Model;
-using VantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
+using vantagePMO_platform.Shared.Application.Model;
+using vantagePMO_platform.Shared.Interfaces.Rest.ProblemDetails;
 
 namespace vantagePMO_platform.ChatHub.Interfaces.Rest;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/chats")]
 [Produces(MediaTypeNames.Application.Json)]

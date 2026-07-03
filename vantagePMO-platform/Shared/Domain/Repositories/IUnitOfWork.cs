@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Shared.Domain.Repositories;
+namespace vantagePMO_platform.Shared.Domain.Repositories;
 
 /// <summary>
 ///     Unit of work interface for all repositories
