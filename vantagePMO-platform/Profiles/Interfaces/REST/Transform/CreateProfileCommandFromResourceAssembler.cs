@@ -1,7 +1,8 @@
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+using System.Globalization;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Profiles.Interfaces.REST.Resources;
 
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Transform;
+namespace vantagePMO_platform.Profiles.Interfaces.REST.Transform;
 
 /// <summary>
 ///     Maps a <see cref="CreateProfileResource" /> to a <see cref="CreateProfileCommand" />.
@@ -13,6 +14,7 @@ public static class CreateProfileCommandFromResourceAssembler
     {
         return new CreateProfileCommand(
             resource.Name,
+            DateOnly.Parse(resource.DateOfBirth),
             resource.Email,
             resource.Role ?? string.Empty,
             resource.Department ?? string.Empty,

@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+namespace vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 
 /// <summary>
 ///     Input resource (DTO) used to partially update a profile (PATCH semantics).
@@ -8,6 +8,7 @@ public record UpdateProfileResource(
     string? Name,
     string? Email,
     string? Role,
+    string? DateOfBirth,
     string? Department,
     string? Joined,
     string? AvatarSeed,

@@ -1,10 +1,11 @@
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+namespace vantagePMO_platform.Profiles.Interfaces.REST.Resources;
 
 /// <summary>
 ///     Input resource (DTO) used to create a new profile.
 /// </summary>
 public record CreateProfileResource(
     string Name,
+    string DateOfBirth,
     string Email,
     string? Role,
     string? Department,

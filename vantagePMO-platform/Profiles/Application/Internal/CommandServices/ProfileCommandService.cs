@@ -46,7 +46,7 @@ public class ProfileCommandService(
                     localizer["ProfilesError.EmailAlreadyRegistered", profile.Email.Value]);
             }
 
-            if (await profileRepository.FindByUserIdAsync(command.UserId, cancellationToken) is not null)
+            if (await profileRepository.FindByUserIdAsync(0, cancellationToken) is not null)
             {
                 return Result<Profile>.Failure(
                     ProfilesError.InvalidProfileData,

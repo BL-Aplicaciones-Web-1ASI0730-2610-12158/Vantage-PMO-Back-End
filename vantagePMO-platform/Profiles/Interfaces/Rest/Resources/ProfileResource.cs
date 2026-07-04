@@ -6,8 +6,8 @@ namespace vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 public record ProfileResource(
     int Id,
     string Name,
-    string Role,
     string? DateOfBirth,
+    string Role,
     string Email,
     string Department,
     string Joined,

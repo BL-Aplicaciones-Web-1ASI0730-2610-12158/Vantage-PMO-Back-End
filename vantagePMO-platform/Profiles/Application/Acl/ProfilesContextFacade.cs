@@ -10,11 +10,10 @@ public class ProfilesContextFacade(IProfileCommandService profileCommandService)
     public async Task<Result<int>> CreateProfile(CreateProfileRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateProfileCommand(
-            request.UserId,
             request.Name,
+            request.DateOfBirth,
             request.Email,
             request.Role,
-            request.DateOfBirth,
             request.Department,
             request.Joined,
             request.AvatarSeed,

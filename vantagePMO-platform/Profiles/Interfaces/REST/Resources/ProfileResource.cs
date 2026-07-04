@@ -1,4 +1,4 @@
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+namespace vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 
 /// <summary>
 ///     Output resource (DTO) representing a profile exposed by the REST API.
@@ -6,6 +6,7 @@ namespace VantagePMO_platform.Profiles.Interfaces.REST.Resources;
 public record ProfileResource(
     int Id,
     string Name,
+    string? DateOfBirth,
     string Role,
     string Email,
     string Department,

@@ -1,21 +1,37 @@
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Profiles.Interfaces.REST.Resources;
+using System.Globalization;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 
-namespace VantagePMO_platform.Profiles.Interfaces.REST.Transform;
+namespace vantagePMO_platform.Profiles.Interfaces.Rest.Transform;
 
-/// <summary>
-///     Maps an <see cref="UpdateProfileResource" /> to an <see cref="UpdateProfileCommand" />.
-/// </summary>
 public static class UpdateProfileCommandFromResourceAssembler
 {
-    /// <summary>Builds an update command for the given id from the supplied input resource.</summary>
+    private const string DateOfBirthFormat = "dd/MM/yyyy";
+
     public static UpdateProfileCommand ToCommandFromResource(int profileId, UpdateProfileResource resource)
     {
+        DateOnly? dateOfBirth = null;
+        if (resource.DateOfBirth is not null)
+        {
+            if (!DateOnly.TryParseExact(
+                    resource.DateOfBirth,
+                    DateOfBirthFormat,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var parsed))
+            {
+                throw new ArgumentException($"Date of birth must use the format {DateOfBirthFormat}.");
+            }
+
+            dateOfBirth = parsed;
+        }
+
         return new UpdateProfileCommand(
             profileId,
             resource.Name,
             resource.Email,
             resource.Role,
+            dateOfBirth,
             resource.Department,
             resource.Joined,
             resource.AvatarSeed,

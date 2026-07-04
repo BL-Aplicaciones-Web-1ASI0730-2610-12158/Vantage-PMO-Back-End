@@ -1,8 +1,8 @@
-using VantagePMO_platform.Profiles.Domain.Model.Aggregates;
-using VantagePMO_platform.Profiles.Domain.Model.Commands;
-using VantagePMO_platform.Shared.Application.Model;
+using vantagePMO_platform.Profiles.Domain.Model.Aggregates;
+using vantagePMO_platform.Profiles.Domain.Model.Commands;
+using vantagePMO_platform.Shared.Application.Model;
 
-namespace VantagePMO_platform.Profiles.Domain.Services;
+namespace vantagePMO_platform.Profiles.Domain.Services;
 
 /// <summary>
 ///     Command side of the Profiles bounded context (write operations).
