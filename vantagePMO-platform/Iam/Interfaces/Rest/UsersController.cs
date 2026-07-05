@@ -141,9 +141,8 @@ public class UsersController(
                 _ => Ok());
         }
 
-        return CreatedAtAction(
-            nameof(GetProfileByUserId),
-            new { id = result.Value },
+        return StatusCode(
+            StatusCodes.Status201Created,
             new FrontSignInUserResource(result.Value, resource.Username.Trim(), resource.Email.Trim()));
     }
 
