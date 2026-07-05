@@ -46,14 +46,28 @@ public static class MeetingsModelBuilderExtensions
                 JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
                 (JsonSerializerOptions?)null) ?? new List<MeetingAgreementItem>());
 
+        var dateConverter = new ValueConverter<DateOnly, DateTime>(
+            d => d.ToDateTime(TimeOnly.MinValue),
+            d => DateOnly.FromDateTime(d));
+
+        var timeConverter = new ValueConverter<TimeOnly, TimeSpan>(
+            t => t.ToTimeSpan(),
+            ts => TimeOnly.FromTimeSpan(ts));
+
         builder.Entity<Meeting>(entity =>
         {
             entity.ToTable("meetings");
             entity.HasKey(meeting => meeting.Id);
             entity.Property(meeting => meeting.Id).ValueGeneratedOnAdd();
             entity.Property(meeting => meeting.Title).IsRequired().HasMaxLength(150);
-            entity.Property(meeting => meeting.Date).IsRequired();
-            entity.Property(meeting => meeting.Time).IsRequired();
+            entity.Property(meeting => meeting.Date)
+                .IsRequired()
+                .HasConversion(dateConverter)
+                .HasColumnType("date");
+            entity.Property(meeting => meeting.Time)
+                .IsRequired()
+                .HasConversion(timeConverter)
+                .HasColumnType("time");
             entity.Property(meeting => meeting.Duration).IsRequired();
             entity.Property(meeting => meeting.Location).IsRequired().HasMaxLength(150);
             entity.Property(meeting => meeting.Type).IsRequired().HasMaxLength(50);
