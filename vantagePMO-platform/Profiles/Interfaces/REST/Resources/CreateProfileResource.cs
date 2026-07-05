@@ -1,4 +1,4 @@
-namespace vantagePMO_platform.Profiles.Interfaces.REST.Resources;
+namespace vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 
 /// <summary>
 ///     Input resource (DTO) used to create a new profile.

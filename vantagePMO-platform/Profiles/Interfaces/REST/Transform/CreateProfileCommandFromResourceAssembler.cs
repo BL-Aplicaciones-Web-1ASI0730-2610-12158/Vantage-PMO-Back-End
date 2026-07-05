@@ -1,8 +1,7 @@
-using System.Globalization;
 using vantagePMO_platform.Profiles.Domain.Model.Commands;
-using vantagePMO_platform.Profiles.Interfaces.REST.Resources;
+using vantagePMO_platform.Profiles.Interfaces.Rest.Resources;
 
-namespace vantagePMO_platform.Profiles.Interfaces.REST.Transform;
+namespace vantagePMO_platform.Profiles.Interfaces.Rest.Transform;
 
 /// <summary>
 ///     Maps a <see cref="CreateProfileResource" /> to a <see cref="CreateProfileCommand" />.
