@@ -41,6 +41,10 @@ public class Profile : IAuditableEntity
     /// <exception cref="ArgumentException">Thrown when name/email value objects are invalid.</exception>
     public Profile(CreateProfileCommand command)
     {
+        if (command.UserId <= 0)
+            throw new ArgumentException("UserId must be greater than zero.", nameof(command));
+
+        UserId = command.UserId;
         Name = new PersonName(command.Name);
         Email = new EmailAddress(command.Email);
         Role = command.Role ?? string.Empty;

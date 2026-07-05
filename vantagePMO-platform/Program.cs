@@ -253,6 +253,12 @@ builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
 var app = builder.Build();
 
+app.Logger.LogInformation(
+    "Database target: server={Server}, database={Database}, environment={Environment}",
+    GetConnectionStringValue(connectionString, "server"),
+    GetConnectionStringValue(connectionString, "database"),
+    app.Environment.EnvironmentName);
+
 // Apply pending migrations at startup.
 using (var scope = app.Services.CreateScope())
 {
@@ -310,3 +316,18 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static string GetConnectionStringValue(string connectionString, string key)
+{
+    foreach (var part in connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        var separator = part.IndexOf('=');
+        if (separator <= 0)
+            continue;
+
+        if (part[..separator].Equals(key, StringComparison.OrdinalIgnoreCase))
+            return part[(separator + 1)..];
+    }
+
+    return "unknown";
+}

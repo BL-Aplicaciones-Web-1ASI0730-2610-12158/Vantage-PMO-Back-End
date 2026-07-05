@@ -9,9 +9,10 @@ namespace vantagePMO_platform.Profiles.Interfaces.Rest.Transform;
 public static class CreateProfileCommandFromResourceAssembler
 {
     /// <summary>Builds a creation command from the supplied input resource.</summary>
-    public static CreateProfileCommand ToCommandFromResource(CreateProfileResource resource)
+    public static CreateProfileCommand ToCommandFromResource(int userId, CreateProfileResource resource)
     {
         return new CreateProfileCommand(
+            userId,
             resource.Name,
             DateOnly.Parse(resource.DateOfBirth),
             resource.Email,
