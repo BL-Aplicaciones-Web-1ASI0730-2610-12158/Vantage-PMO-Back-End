@@ -81,6 +81,8 @@ using vantagePMO_platform.TaskCollaboration.Application.Internal.QueryServices;
 using vantagePMO_platform.TaskCollaboration.Application.QueryServices;
 using vantagePMO_platform.TaskCollaboration.Domain.Repositories;
 using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Workspace.Domain.Repositories;
+using vantagePMO_platform.Workspace.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -242,6 +244,9 @@ builder.Services.AddScoped<IBoardMemberQueryService, BoardMemberQueryService>();
 builder.Services.AddScoped<ICollaborationTaskQueryService, CollaborationTaskQueryService>();
 builder.Services.AddScoped<TaskCollaborationSampleDataSeeder>();
 
+// Workspace bounded context dependency injection.
+builder.Services.AddScoped<IWorkspaceSelectionRepository, WorkspaceSelectionRepository>();
+
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -305,7 +310,11 @@ app.UseRequestLocalization(localizationOptions);
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseRouting();
 app.UseCors();
 app.UseRequestAuthorization();
