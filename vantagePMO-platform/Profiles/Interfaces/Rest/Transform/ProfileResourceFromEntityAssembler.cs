@@ -13,8 +13,8 @@ public static class ProfileResourceFromEntityAssembler
         return new ProfileResource(
             exposeUserId ? entity.UserId : entity.Id,
             entity.Name.FullName,
-            entity.Role,
             entity.DateOfBirth?.ToString(DateOfBirthFormat, CultureInfo.InvariantCulture),
+            entity.Role ?? string.Empty,
             entity.Email.Value,
             entity.Department,
             entity.Joined,

@@ -48,7 +48,10 @@ public static class ModelBuilderExtensions
             profile.HasIndex(p => p.UserId).IsUnique();
 
             profile.Property(p => p.Role).HasMaxLength(120);
-            profile.Property(p => p.DateOfBirth);
+            profile.Property(p => p.DateOfBirth)
+                .HasConversion(
+                    date => date.HasValue ? date.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                    value => value.HasValue ? DateOnly.FromDateTime(value.Value) : null);
             profile.Property(p => p.Department).HasMaxLength(120);
             profile.Property(p => p.Joined).HasMaxLength(60);
             profile.Property(p => p.AvatarSeed).HasMaxLength(120);

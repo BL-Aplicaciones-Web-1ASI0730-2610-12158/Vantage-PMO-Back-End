@@ -16,15 +16,17 @@ public class ProfileRepository(AppDbContext context)
     /// <inheritdoc />
     public async Task<Profile?> FindByEmailAsync(EmailAddress email, CancellationToken cancellationToken = default)
     {
+        var normalizedEmail = email.Value;
         return await Context.Set<Profile>()
-            .FirstOrDefaultAsync(profile => profile.Email == email, cancellationToken);
+            .FirstOrDefaultAsync(profile => profile.Email.Value == normalizedEmail, cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<bool> ExistsByEmailAsync(EmailAddress email, CancellationToken cancellationToken = default)
     {
+        var normalizedEmail = email.Value;
         return await Context.Set<Profile>()
-            .AnyAsync(profile => profile.Email == email, cancellationToken);
+            .AnyAsync(profile => profile.Email.Value == normalizedEmail, cancellationToken);
     }
 
     /// <inheritdoc />
