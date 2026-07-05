@@ -52,12 +52,25 @@ public static class IamActionResultAssembler
 
     public static IActionResult ToActionResultFromSignUpResult(
         ControllerBase controller,
-        Result result, // Non-generic Result
+        Result result,
         IStringLocalizer<ErrorMessages> errorLocalizer,
         ProblemDetailsFactory problemDetailsFactory,
         Func<IActionResult> successAction)
     {
         if (result.IsSuccess) return successAction();
+
+        var statusCode = ToStatusCodeFromIamError((IamError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
+    }
+
+    public static IActionResult ToActionResultFromSignUpResult(
+        ControllerBase controller,
+        Result<int> result,
+        IStringLocalizer<ErrorMessages> errorLocalizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<int, IActionResult> successAction)
+    {
+        if (result.IsSuccess) return successAction(result.Value);
 
         var statusCode = ToStatusCodeFromIamError((IamError)result.Error!);
         return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);

@@ -13,7 +13,7 @@ namespace vantagePMO_platform.Iam.Interfaces.Rest.Transform;
 /// </summary>
 public static class SignUpCommandFromResourceAssembler
 {
-    private const string DateOfBirthFormat = "dd/MM/yyyy";
+    private static readonly string[] SupportedDateFormats = ["yyyy-MM-dd", "dd/MM/yyyy"];
 
     /// <summary>
     ///     Converts a <see cref="SignUpResource" /> to a <see cref="SignUpCommand" />.
@@ -32,15 +32,15 @@ public static class SignUpCommandFromResourceAssembler
         }
 
         if (!DateOnly.TryParseExact(
-                resource.DateOfBirth,
-                DateOfBirthFormat,
+                resource.DateOfBirth?.Trim() ?? string.Empty,
+                SupportedDateFormats,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var dateOfBirth))
         {
             return Result<SignUpCommand>.Failure(
                 IamError.InvalidDateOfBirth,
-                localizer[$"IamError.{nameof(IamError.InvalidDateOfBirth)}", DateOfBirthFormat]);
+                localizer[$"IamError.{nameof(IamError.InvalidDateOfBirth)}", "yyyy-MM-dd"]);
         }
 
         return Result<SignUpCommand>.Success(new SignUpCommand(
@@ -48,7 +48,7 @@ public static class SignUpCommandFromResourceAssembler
             resource.Password,
             resource.FullName.Trim(),
             resource.Email.Trim(),
-            resource.Role.Trim(),
+            resource.Role?.Trim() ?? string.Empty,
             dateOfBirth));
     }
 }

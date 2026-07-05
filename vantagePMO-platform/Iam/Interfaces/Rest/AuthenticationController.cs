@@ -99,7 +99,10 @@ public class AuthenticationController(
             result,
             errorLocalizer,
             problemDetailsFactory,
-            () => Ok(new { message = iamLocalizer["UserCreatedSuccessfully"] })
-        );
+            userId => Ok(new
+            {
+                id = userId,
+                message = iamLocalizer["UserCreatedSuccessfully"].Value
+            }));
     }
 }

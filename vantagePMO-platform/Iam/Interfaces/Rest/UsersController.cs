@@ -138,20 +138,13 @@ public class UsersController(
                 result,
                 errorLocalizer,
                 problemDetailsFactory,
-                () => Ok());
+                _ => Ok());
         }
-
-        var createdUser = await userQueryService.Handle(
-            new GetUserByUsernameQuery(resource.Username.Trim()),
-            cancellationToken);
-
-        if (createdUser is null)
-            return StatusCode(StatusCodes.Status500InternalServerError);
 
         return CreatedAtAction(
             nameof(GetProfileByUserId),
-            new { id = createdUser.Id },
-            new FrontSignInUserResource(createdUser.Id, createdUser.Username, resource.Email.Trim()));
+            new { id = result.Value },
+            new FrontSignInUserResource(result.Value, resource.Username.Trim(), resource.Email.Trim()));
     }
 
     /// <summary>

@@ -41,19 +41,21 @@ public class UserCommandService(
         return Result<(User user, string token)>.Success((user, token));
     }
 
-    public async Task<Result> Handle(SignUpCommand command, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(SignUpCommand command, CancellationToken cancellationToken)
     {
         if (await userRepository.ExistsByUsernameAsync(command.Username, cancellationToken))
-            return Result.Failure(
+            return Result<int>.Failure(
                 IamError.UsernameAlreadyTaken,
                 localizer[$"IamError.{nameof(IamError.UsernameAlreadyTaken)}", command.Username]);
 
         var hashedPassword = hashingService.HashPassword(command.Password);
         var user = new User(command.Username, hashedPassword);
+        var userPersisted = false;
         try
         {
             await userRepository.AddAsync(user, cancellationToken);
             await unitOfWork.CompleteAsync(cancellationToken);
+            userPersisted = true;
 
             var firstName = command.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()
                             ?? command.FullName;
@@ -83,30 +85,38 @@ public class UserCommandService(
 
             if (profileResult.IsFailure)
             {
-                userRepository.Remove(user);
-                await unitOfWork.CompleteAsync(cancellationToken);
+                await CleanupFailedSignUpAsync(user, cancellationToken);
                 return MapProfileErrorToSignUpResult(profileResult);
             }
 
             await profileRelatedDataSeeder.SeedDefaultsAsync(user.Id, command.FullName, cancellationToken);
             await unitOfWork.CompleteAsync(cancellationToken);
-            return Result.Success();
+            return Result<int>.Success(user.Id);
         }
         catch (OperationCanceledException)
         {
-            return Result.Failure(
+            if (userPersisted)
+                await CleanupFailedSignUpAsync(user, cancellationToken);
+
+            return Result<int>.Failure(
                 IamError.OperationCancelled,
                 localizer[$"IamError.{nameof(IamError.OperationCancelled)}"]);
         }
         catch (DbUpdateException)
         {
-            return Result.Failure(
+            if (userPersisted)
+                await CleanupFailedSignUpAsync(user, cancellationToken);
+
+            return Result<int>.Failure(
                 IamError.DatabaseError,
                 localizer[$"IamError.{nameof(IamError.DatabaseError)}"]);
         }
         catch (Exception)
         {
-            return Result.Failure(
+            if (userPersisted)
+                await CleanupFailedSignUpAsync(user, cancellationToken);
+
+            return Result<int>.Failure(
                 IamError.InternalServerError,
                 localizer[$"IamError.{nameof(IamError.InternalServerError)}"]);
         }
@@ -158,20 +168,33 @@ public class UserCommandService(
         }
     }
 
-    private Result MapProfileErrorToSignUpResult(Result<int> profileResult)
+    private static Result<int> MapProfileErrorToSignUpResult(Result<int> profileResult)
     {
         return profileResult.Error switch
         {
             ProfilesError.EmailAlreadyRegistered =>
-                Result.Failure(IamError.EmailAlreadyRegistered, profileResult.Message),
+                Result<int>.Failure(IamError.EmailAlreadyRegistered, profileResult.Message),
             ProfilesError.InvalidProfileData =>
-                Result.Failure(IamError.InvalidProfileData, profileResult.Message),
+                Result<int>.Failure(IamError.InvalidProfileData, profileResult.Message),
             ProfilesError.OperationCancelled =>
-                Result.Failure(IamError.OperationCancelled, profileResult.Message),
+                Result<int>.Failure(IamError.OperationCancelled, profileResult.Message),
             ProfilesError.DatabaseError =>
-                Result.Failure(IamError.DatabaseError, profileResult.Message),
+                Result<int>.Failure(IamError.DatabaseError, profileResult.Message),
             _ =>
-                Result.Failure(IamError.InternalServerError, profileResult.Message)
+                Result<int>.Failure(IamError.InternalServerError, profileResult.Message)
         };
+    }
+
+    private async Task CleanupFailedSignUpAsync(User user, CancellationToken cancellationToken)
+    {
+        try
+        {
+            userRepository.Remove(user);
+            await unitOfWork.CompleteAsync(cancellationToken);
+        }
+        catch (DbUpdateException)
+        {
+            // Best-effort rollback when profile/seed data fails after the user row was created.
+        }
     }
 }

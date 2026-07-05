@@ -32,7 +32,7 @@ public interface IUserCommandService
         * <param name="cancellationToken">The cancellation token</param>
         * <returns>A confirmation message on successful creation.</returns>
         */
-    Task<Result> Handle(SignUpCommand command, CancellationToken cancellationToken);
+    Task<Result<int>> Handle(SignUpCommand command, CancellationToken cancellationToken);
 
     Task<Result<User>> UpdatePasswordAsync(UpdatePasswordCommand command, CancellationToken cancellationToken = default);
 }
