@@ -26,6 +26,20 @@ public class ProfileCommandService(
     {
         try
         {
+            if (command.UserId <= 0)
+            {
+                return Result<Profile>.Failure(
+                    ProfilesError.InvalidProfileData,
+                    localizer["ProfilesError.InvalidProfileData"]);
+            }
+
+            if (await profileRepository.FindByUserIdAsync(command.UserId, cancellationToken) is not null)
+            {
+                return Result<Profile>.Failure(
+                    ProfilesError.InvalidProfileData,
+                    localizer["ProfilesError.InvalidProfileData"]);
+            }
+
             Profile profile;
             try
             {
@@ -44,13 +58,6 @@ public class ProfileCommandService(
                 return Result<Profile>.Failure(
                     ProfilesError.EmailAlreadyRegistered,
                     localizer["ProfilesError.EmailAlreadyRegistered", profile.Email.Value]);
-            }
-
-            if (await profileRepository.FindByUserIdAsync(0, cancellationToken) is not null)
-            {
-                return Result<Profile>.Failure(
-                    ProfilesError.InvalidProfileData,
-                    localizer["ProfilesError.InvalidProfileData"]);
             }
 
             await profileRepository.AddAsync(profile, cancellationToken);
