@@ -18,6 +18,12 @@ public class RequestAuthorizationMiddleware(RequestDelegate next)
         IUserQueryService userQueryService,
         ITokenService tokenService)
     {
+        if (HttpMethods.IsOptions(context.Request.Method))
+        {
+            await next(context);
+            return;
+        }
+
         var endpoint = context.GetEndpoint();
         var allowAnonymous = endpoint?.Metadata.Any(m => m is AllowAnonymousAttribute) == true;
 

@@ -36,16 +36,17 @@ public class GlobalExceptionHandlerMiddleware(
     {
         try
         {
-            var path = context.Request.Path.Value?.ToLower();
-            if (path != null && (path.Contains("/swagger") || path.Contains("/swagger-ui")))
-            {
-                await next(context);
-            }        
+            await next(context);
         }
         catch (OperationCanceledException ex)
         {
             logger.LogWarning(ex, "Request was cancelled: {Message}", ex.Message);
             await HandleOperationCanceledExceptionAsync(context, ex);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            logger.LogWarning(ex, "Unauthorized request: {Message}", ex.Message);
+            await HandleUnauthorizedExceptionAsync(context, ex);
         }
         catch (Exception ex)
         {
@@ -62,6 +63,25 @@ public class GlobalExceptionHandlerMiddleware(
      * <param name="exception">The exception</param>
      * <returns>A task</returns>
      */
+    private async Task HandleUnauthorizedExceptionAsync(HttpContext context, UnauthorizedAccessException exception)
+    {
+        context.Response.ContentType = MediaTypeNames.Application.Json;
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+        var problemDetails = new ProblemDetails
+        {
+            Status = StatusCodes.Status401Unauthorized,
+            Title = _errorLocalizer["IamError.InvalidCredentials"],
+            Detail = exception.Message,
+            Instance = context.Request.Path
+        };
+
+        var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        var result = JsonSerializer.Serialize(problemDetails, jsonOptions);
+
+        await context.Response.WriteAsync(result);
+    }
+
     private async Task HandleOperationCanceledExceptionAsync(HttpContext context, OperationCanceledException exception)
     {
         context.Response.ContentType = MediaTypeNames.Application.Json;
