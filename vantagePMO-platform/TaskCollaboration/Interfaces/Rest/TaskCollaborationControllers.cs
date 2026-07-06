@@ -57,16 +57,19 @@ public class CollaborationTasksController(
 {
     [HttpGet]
     [SwaggerOperation(Summary = "Get dashboard or collaboration tasks", OperationId = "GetCollaborationTasks")]
-    public async Task<IActionResult> GetAll([FromQuery] int? boardId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int? boardId,
+        [FromQuery] string? scope,
+        CancellationToken cancellationToken)
     {
-        if (!boardId.HasValue)
+        if (string.Equals(scope, "collaboration", StringComparison.OrdinalIgnoreCase) || boardId.HasValue)
         {
-            var dashboardTasks = await dashboardTaskQueryService.Handle(new GetAllDashboardTasksQuery(), cancellationToken);
-            return Ok(DashboardTaskResourceFromEntityAssembler.ToResourcesFromEntities(dashboardTasks));
+            var tasks = await collaborationTaskQueryService.Handle(new GetCollaborationTasksQuery(boardId), cancellationToken);
+            return Ok(TaskCollaborationResourceFromEntityAssembler.ToResources(tasks));
         }
 
-        var tasks = await collaborationTaskQueryService.Handle(new GetCollaborationTasksQuery(boardId), cancellationToken);
-        return Ok(TaskCollaborationResourceFromEntityAssembler.ToResources(tasks));
+        var dashboardTasks = await dashboardTaskQueryService.Handle(new GetAllDashboardTasksQuery(), cancellationToken);
+        return Ok(DashboardTaskResourceFromEntityAssembler.ToResourcesFromEntities(dashboardTasks));
     }
 
     [HttpPost]
