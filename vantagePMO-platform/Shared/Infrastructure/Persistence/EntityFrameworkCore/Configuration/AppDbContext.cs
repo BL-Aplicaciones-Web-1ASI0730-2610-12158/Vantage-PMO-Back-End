@@ -28,9 +28,9 @@ namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
     /// <summary>
-    ///     DbSet for Schedule aggregates.
+    ///     DbSet for user-owned schedule entries (Schedule bounded context).
     /// </summary>
-    public DbSet<ScheduleEntry> Schedules { get; set; } = null!;
+    public DbSet<ScheduleEntry> ScheduleEntries { get; set; } = null!;
 
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder builder)

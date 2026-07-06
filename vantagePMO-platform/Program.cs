@@ -95,7 +95,7 @@ using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configurat
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
-using ScheduleContextFacade = vantagePMO_platform.Schedule.Application.Acl.ScheduleContextFacade;
+using ScheduleContextFacade = vantagePMO_platform.Schedule.Interfaces.Acl.ScheduleContextFacade;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -284,35 +284,38 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
 
-    var projectsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ProjectsSampleDataSeeder>();
-    await projectsSampleDataSeeder.SeedIfEmptyAsync();
+    if (app.Environment.IsDevelopment())
+    {
+        var projectsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ProjectsSampleDataSeeder>();
+        await projectsSampleDataSeeder.SeedIfEmptyAsync();
 
-    var dashboardSampleDataSeeder = scope.ServiceProvider.GetRequiredService<DashboardSampleDataSeeder>();
-    await dashboardSampleDataSeeder.SeedIfEmptyAsync();
+        var dashboardSampleDataSeeder = scope.ServiceProvider.GetRequiredService<DashboardSampleDataSeeder>();
+        await dashboardSampleDataSeeder.SeedIfEmptyAsync();
 
-    var chatHubSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ChatHubSampleDataSeeder>();
-    await chatHubSampleDataSeeder.SeedIfEmptyAsync();
+        var chatHubSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ChatHubSampleDataSeeder>();
+        await chatHubSampleDataSeeder.SeedIfEmptyAsync();
 
-    var reportsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ReportsSampleDataSeeder>();
-    await reportsSampleDataSeeder.SeedIfEmptyAsync();
+        var reportsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ReportsSampleDataSeeder>();
+        await reportsSampleDataSeeder.SeedIfEmptyAsync();
 
-    var analyticsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<AnalyticsSampleDataSeeder>();
-    await analyticsSampleDataSeeder.SeedIfEmptyAsync();
+        var analyticsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<AnalyticsSampleDataSeeder>();
+        await analyticsSampleDataSeeder.SeedIfEmptyAsync();
 
-    var meetingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<MeetingsSampleDataSeeder>();
-    await meetingsSampleDataSeeder.SeedIfEmptyAsync();
+        var meetingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<MeetingsSampleDataSeeder>();
+        await meetingsSampleDataSeeder.SeedIfEmptyAsync();
 
-    var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
-    await supportSampleDataSeeder.SeedIfEmptyAsync();
+        var supportSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SupportSampleDataSeeder>();
+        await supportSampleDataSeeder.SeedIfEmptyAsync();
 
-    var settingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SettingsSampleDataSeeder>();
-    await settingsSampleDataSeeder.SeedIfEmptyAsync();
+        var settingsSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SettingsSampleDataSeeder>();
+        await settingsSampleDataSeeder.SeedIfEmptyAsync();
 
-    var systemAdministrationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SystemAdministrationSampleDataSeeder>();
-    await systemAdministrationSampleDataSeeder.SeedIfEmptyAsync();
+        var systemAdministrationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<SystemAdministrationSampleDataSeeder>();
+        await systemAdministrationSampleDataSeeder.SeedIfEmptyAsync();
 
-    var taskCollaborationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<TaskCollaborationSampleDataSeeder>();
-    await taskCollaborationSampleDataSeeder.SeedIfEmptyAsync();
+        var taskCollaborationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<TaskCollaborationSampleDataSeeder>();
+        await taskCollaborationSampleDataSeeder.SeedIfEmptyAsync();
+    }
 }
 
 // Global exception handler must sit at the top of the pipeline.

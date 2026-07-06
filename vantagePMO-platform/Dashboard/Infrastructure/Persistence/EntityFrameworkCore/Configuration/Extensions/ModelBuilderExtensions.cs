@@ -37,7 +37,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<ScheduleItem>(item =>
         {
-            item.ToTable("schedule");
+            item.ToTable("schedules");
             item.HasKey(entity => entity.Id);
             item.Property(entity => entity.Id).ValueGeneratedOnAdd();
             item.Property(entity => entity.Date).HasMaxLength(20);

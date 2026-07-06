@@ -9,13 +9,13 @@ namespace vantagePMO_platform.Schedule.Interfaces.Rest;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
-public class ScheduleController : ControllerBase
+[Route("api/v1/user-schedules")]
+public class UserSchedulesController : ControllerBase
 {
     private readonly IScheduleCommandService _commandService;
     private readonly IScheduleQueryService _queryService;
 
-    public ScheduleController(IScheduleCommandService commandService, IScheduleQueryService queryService)
+    public UserSchedulesController(IScheduleCommandService commandService, IScheduleQueryService queryService)
     {
         _commandService = commandService;
         _queryService = queryService;

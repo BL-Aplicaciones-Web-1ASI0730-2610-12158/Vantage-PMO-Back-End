@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vantagePMO_platform.Schedule.Domain.Model.Aggregates;
 
 namespace vantagePMO_platform.Schedule.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -7,8 +8,13 @@ public static class ScheduleModelBuilderExtensions
 {
     public static void ConfigureScheduleAggregates(this ModelBuilder builder)
     {
+        var timeConverter = new ValueConverter<TimeOnly, TimeSpan>(
+            time => time.ToTimeSpan(),
+            value => TimeOnly.FromTimeSpan(value));
+
         builder.Entity<ScheduleEntry>(entity =>
         {
+            entity.ToTable("user_schedule_entries");
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Id)
@@ -21,6 +27,7 @@ public static class ScheduleModelBuilderExtensions
                 .IsRequired();
 
             entity.Property(e => e.Time)
+                .HasConversion(timeConverter)
                 .IsRequired();
 
             entity.Property(e => e.Duration)
@@ -41,16 +48,6 @@ public static class ScheduleModelBuilderExtensions
             entity.Property(e => e.Active)
                 .IsRequired()
                 .HasDefaultValue(true);
-
-            entity.Property(e => e.CreatedAt)
-                .IsRequired()
-                .ValueGeneratedOnAdd()
-                .HasDefaultValueSql("GETUTCDATE()");
-
-            entity.Property(e => e.UpdatedAt)
-                .IsRequired()
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("GETUTCDATE()");
 
             entity.HasIndex(e => e.UserId);
             entity.HasIndex(e => new { e.UserId, e.Date });

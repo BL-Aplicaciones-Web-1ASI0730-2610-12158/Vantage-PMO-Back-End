@@ -17,13 +17,13 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<ScheduleEntry?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.Schedules
+        return await _context.ScheduleEntries
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<ScheduleEntry>> FindByUserIdAsync(int userId, CancellationToken cancellationToken = default)
     {
-        return await _context.Schedules
+        return await _context.ScheduleEntries
             .Where(s => s.UserId == userId)
             .OrderBy(s => s.Date)
             .ThenBy(s => s.Time)
@@ -33,7 +33,7 @@ public class ScheduleRepository : IScheduleRepository
     public async Task<IEnumerable<ScheduleEntry>> FindByUserIdAndDateRangeAsync(int userId, DateTime startDate,
         DateTime endDate, CancellationToken cancellationToken = default)
     {
-        return await _context.Schedules
+        return await _context.ScheduleEntries
             .Where(s => s.UserId == userId && s.Date >= startDate && s.Date <= endDate && s.Active)
             .OrderBy(s => s.Date)
             .ThenBy(s => s.Time)
@@ -42,22 +42,22 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task AddAsync(ScheduleEntry entity, CancellationToken cancellationToken = default)
     {
-        await _context.Schedules.AddAsync(entity, cancellationToken);
+        await _context.ScheduleEntries.AddAsync(entity, cancellationToken);
     }
 
     public void Update(ScheduleEntry entity)
     {
-        _context.Schedules.Update(entity);
+        _context.ScheduleEntries.Update(entity);
     }
 
     public void Remove(ScheduleEntry entity)
     {
-        _context.Schedules.Remove(entity);
+        _context.ScheduleEntries.Remove(entity);
     }
 
     public async Task<IEnumerable<ScheduleEntry>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.Schedules.ToListAsync(cancellationToken);
+        return await _context.ScheduleEntries.ToListAsync(cancellationToken);
     }
 
     public async Task<ScheduleEntry?> FindAsync(int id, CancellationToken cancellationToken = default)
