@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using vantagePMO_platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using vantagePMO_platform.Schedule.Application.CommandServices;
 using vantagePMO_platform.Schedule.Application.QueryServices;
 using vantagePMO_platform.Schedule.Interfaces.Rest.Resources;
@@ -7,7 +7,7 @@ using vantagePMO_platform.Schedule.Interfaces.Rest.Transform;
 
 namespace vantagePMO_platform.Schedule.Interfaces.Rest;
 
-[Authorize]
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/user-schedules")]
 public class UserSchedulesController : ControllerBase

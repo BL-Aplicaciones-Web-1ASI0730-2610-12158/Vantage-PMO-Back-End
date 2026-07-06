@@ -28,10 +28,7 @@ public class StatsController(IProfileStatsQueryService profileStatsQueryService)
                 new GetProfileStatsByUserIdQuery(userId.Value),
                 cancellationToken);
 
-            if (stats is null)
-                return Ok(Array.Empty<object>());
-
-            return Ok(new[] { ProfileStatsResourceFromEntityAssembler.ToResourceFromEntity(stats) });
+            return Ok(new[] { ProfileStatsResourceFromEntityAssembler.ToResourceFromEntity(stats!) });
         }
 
         var allStats = await profileStatsQueryService.Handle(new GetAllProfileStatsQuery(), cancellationToken);

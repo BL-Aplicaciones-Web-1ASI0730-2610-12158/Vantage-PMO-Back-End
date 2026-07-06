@@ -15,4 +15,12 @@ public class ProjectRepository(AppDbContext context)
             .OrderBy(project => project.Id)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Project>> FindByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<Project>()
+            .Where(project => project.UserId == userId)
+            .OrderBy(project => project.Id)
+            .ToListAsync(cancellationToken);
+    }
 }
