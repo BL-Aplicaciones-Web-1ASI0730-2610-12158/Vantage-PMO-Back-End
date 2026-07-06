@@ -14,6 +14,8 @@ using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCor
 using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Workspace.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Schedule.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.Schedule.Domain.Model.Aggregates;
 
 namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
@@ -25,6 +27,11 @@ namespace vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkC
 /// </param>
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
+    /// <summary>
+    ///     DbSet for Schedule aggregates.
+    /// </summary>
+    public DbSet<ScheduleEntry> Schedules { get; set; } = null!;
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
@@ -84,6 +91,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // Workspace Context
         builder.ApplyWorkspaceConfiguration();
+
+        // Schedule Context
+        builder.ConfigureScheduleAggregates();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();

@@ -81,6 +81,13 @@ using vantagePMO_platform.TaskCollaboration.Application.Internal.QueryServices;
 using vantagePMO_platform.TaskCollaboration.Application.QueryServices;
 using vantagePMO_platform.TaskCollaboration.Domain.Repositories;
 using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Schedule.Application.CommandServices;
+using vantagePMO_platform.Schedule.Application.Internal.CommandServices;
+using vantagePMO_platform.Schedule.Application.Internal.QueryServices;
+using vantagePMO_platform.Schedule.Application.QueryServices;
+using vantagePMO_platform.Schedule.Domain.Repositories;
+using vantagePMO_platform.Schedule.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.Schedule.Interfaces.Acl;
 using vantagePMO_platform.Workspace.Domain.Repositories;
 using vantagePMO_platform.Workspace.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
@@ -88,6 +95,7 @@ using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configurat
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+using ScheduleContextFacade = vantagePMO_platform.Schedule.Application.Acl.ScheduleContextFacade;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -246,6 +254,12 @@ builder.Services.AddScoped<TaskCollaborationSampleDataSeeder>();
 
 // Workspace bounded context dependency injection.
 builder.Services.AddScoped<IWorkspaceSelectionRepository, WorkspaceSelectionRepository>();
+
+// Schedule bounded context dependency injection.
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<IScheduleCommandService, ScheduleCommandService>();
+builder.Services.AddScoped<IScheduleQueryService, ScheduleQueryService>();
+builder.Services.AddScoped<IScheduleContextFacade, ScheduleContextFacade>();
 
 // IAM bounded context dependency injection.
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
