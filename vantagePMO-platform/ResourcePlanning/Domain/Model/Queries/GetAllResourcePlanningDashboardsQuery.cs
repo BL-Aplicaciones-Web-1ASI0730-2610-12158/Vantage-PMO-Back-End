@@ -1,0 +1,3 @@
+namespace vantagePMO_platform.ResourcePlanning.Domain.Model.Queries;
+
+public record GetAllResourcePlanningDashboardsQuery;

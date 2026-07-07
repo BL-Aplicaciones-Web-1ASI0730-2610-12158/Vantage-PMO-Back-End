@@ -95,6 +95,11 @@ using vantagePMO_platform.RiskCompliance.Application.Internal.QueryServices;
 using vantagePMO_platform.RiskCompliance.Application.QueryServices;
 using vantagePMO_platform.RiskCompliance.Domain.Repositories;
 using vantagePMO_platform.RiskCompliance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.ResourcePlanning.Application.Internal.CommandServices;
+using vantagePMO_platform.ResourcePlanning.Application.Internal.QueryServices;
+using vantagePMO_platform.ResourcePlanning.Application.QueryServices;
+using vantagePMO_platform.ResourcePlanning.Domain.Repositories;
+using vantagePMO_platform.ResourcePlanning.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -267,6 +272,11 @@ builder.Services.AddScoped<IComplianceMetricsRepository, ComplianceMetricsReposi
 builder.Services.AddScoped<IRiskComplianceQueryService, RiskComplianceQueryService>();
 builder.Services.AddScoped<RiskComplianceSampleDataSeeder>();
 
+// Resource Planning bounded context dependency injection.
+builder.Services.AddScoped<IResourcePlanningDashboardRepository, ResourcePlanningDashboardRepository>();
+builder.Services.AddScoped<IResourcePlanningDashboardQueryService, ResourcePlanningDashboardQueryService>();
+builder.Services.AddScoped<ResourcePlanningSampleDataSeeder>();
+
 // Schedule bounded context dependency injection.
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IScheduleCommandService, ScheduleCommandService>();
@@ -331,6 +341,9 @@ using (var scope = app.Services.CreateScope())
 
     var riskComplianceSampleDataSeeder = scope.ServiceProvider.GetRequiredService<RiskComplianceSampleDataSeeder>();
     await riskComplianceSampleDataSeeder.SeedIfEmptyAsync();
+
+    var resourcePlanningSampleDataSeeder = scope.ServiceProvider.GetRequiredService<ResourcePlanningSampleDataSeeder>();
+    await resourcePlanningSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
