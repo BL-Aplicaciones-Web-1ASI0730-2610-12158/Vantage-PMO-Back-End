@@ -14,6 +14,7 @@ using vantagePMO_platform.Settings.Infrastructure.Persistence.EntityFrameworkCor
 using vantagePMO_platform.SystemAdministration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.TaskCollaboration.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Workspace.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using vantagePMO_platform.RiskCompliance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Schedule.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using vantagePMO_platform.Schedule.Domain.Model.Aggregates;
 
@@ -94,6 +95,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // Schedule Context
         builder.ConfigureScheduleAggregates();
+
+        // Risk & Compliance Context
+        builder.ApplyRiskComplianceConfiguration();
 
         // General Naming Convention for the database objects
         builder.UseSnakeCaseNamingConvention();

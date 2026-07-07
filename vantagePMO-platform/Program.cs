@@ -90,6 +90,11 @@ using vantagePMO_platform.Schedule.Infrastructure.Persistence.EntityFrameworkCor
 using vantagePMO_platform.Schedule.Interfaces.Acl;
 using vantagePMO_platform.Workspace.Domain.Repositories;
 using vantagePMO_platform.Workspace.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using vantagePMO_platform.RiskCompliance.Application.Internal.CommandServices;
+using vantagePMO_platform.RiskCompliance.Application.Internal.QueryServices;
+using vantagePMO_platform.RiskCompliance.Application.QueryServices;
+using vantagePMO_platform.RiskCompliance.Domain.Repositories;
+using vantagePMO_platform.RiskCompliance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using vantagePMO_platform.Shared.Domain.Repositories;
 using vantagePMO_platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using vantagePMO_platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -255,6 +260,13 @@ builder.Services.AddScoped<TaskCollaborationSampleDataSeeder>();
 // Workspace bounded context dependency injection.
 builder.Services.AddScoped<IWorkspaceSelectionRepository, WorkspaceSelectionRepository>();
 
+// Risk & Compliance bounded context dependency injection.
+builder.Services.AddScoped<IRiskItemRepository, RiskItemRepository>();
+builder.Services.AddScoped<IRiskMatrixRepository, RiskMatrixRepository>();
+builder.Services.AddScoped<IComplianceMetricsRepository, ComplianceMetricsRepository>();
+builder.Services.AddScoped<IRiskComplianceQueryService, RiskComplianceQueryService>();
+builder.Services.AddScoped<RiskComplianceSampleDataSeeder>();
+
 // Schedule bounded context dependency injection.
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IScheduleCommandService, ScheduleCommandService>();
@@ -316,6 +328,9 @@ using (var scope = app.Services.CreateScope())
         var taskCollaborationSampleDataSeeder = scope.ServiceProvider.GetRequiredService<TaskCollaborationSampleDataSeeder>();
         await taskCollaborationSampleDataSeeder.SeedIfEmptyAsync();
     }
+
+    var riskComplianceSampleDataSeeder = scope.ServiceProvider.GetRequiredService<RiskComplianceSampleDataSeeder>();
+    await riskComplianceSampleDataSeeder.SeedIfEmptyAsync();
 }
 
 // Global exception handler must sit at the top of the pipeline.
