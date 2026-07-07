@@ -15,4 +15,9 @@ public class MeetingQueryService(IMeetingRepository meetingRepository) : IMeetin
     {
         return await meetingRepository.ListAsync();
     }
+
+    public async Task<Meeting?> Handle(GetMeetingByIdQuery query)
+    {
+        return await meetingRepository.FindByIdAsync(query.MeetingId);
+    }
 }

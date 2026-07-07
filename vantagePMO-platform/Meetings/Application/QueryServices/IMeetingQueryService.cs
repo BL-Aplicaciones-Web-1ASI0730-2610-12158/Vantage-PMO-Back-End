@@ -9,6 +9,7 @@ namespace vantagePMO_platform.Meetings.Application.QueryServices;
 /// </summary>
 public interface IMeetingQueryService
 {
-    /// <summary>Devuelve todas las reuniones registradas.</summary>
     Task<IEnumerable<Meeting>> Handle(GetAllMeetingsQuery query);
+
+    Task<Meeting?> Handle(GetMeetingByIdQuery query);
 }

@@ -53,4 +53,16 @@ public class Meeting
     public List<MeetingMinuteItem> Minutes { get; private set; }
     public List<MeetingAgreementItem> Agreements { get; private set; }
     public string Segment { get; private set; }
+
+    public bool TryConvertAgreementToTask(int agreementId, int taskId)
+    {
+        var agreement = Agreements.FirstOrDefault(item => item.Id == agreementId);
+        if (agreement is null ||
+            string.Equals(agreement.Status, "converted", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        agreement.Status = "converted";
+        agreement.TaskRef = $"#{taskId}";
+        return true;
+    }
 }

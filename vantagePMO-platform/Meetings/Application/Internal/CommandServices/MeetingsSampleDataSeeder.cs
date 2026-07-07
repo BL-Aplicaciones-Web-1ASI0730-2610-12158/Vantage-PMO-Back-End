@@ -65,7 +65,7 @@ public class MeetingsSampleDataSeeder(
                     new MeetingAgreementItem { Id = 1, Title = "Allocate 2 backend engineers to data migration", Owner = "Sarah J.", Deadline = "Jun 1", Tag = "Task", Status = "open" },
                     new MeetingAgreementItem { Id = 2, Title = "Update risk register weekly during Phase 2", Owner = "Daniel B.", Tag = "Policy", Status = "open" }
                 ],
-                "Engineering Leadership")),
+                "Segment 2 (Operations) Engineering Leadership")),
             new Meeting(new CreateMeetingCommand(
                 "Monthly Stakeholder Sync",
                 new DateOnly(2026, 5, 9),
