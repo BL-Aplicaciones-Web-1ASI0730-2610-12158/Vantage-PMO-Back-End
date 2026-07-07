@@ -23,7 +23,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<ResourcePlanningDashboard>(dashboard =>
         {
-            dashboard.ToTable("resource_planning");
+            dashboard.ToTable("resource_plannings");
             dashboard.HasKey(entity => entity.Id);
             dashboard.Property(entity => entity.Id).ValueGeneratedOnAdd();
             dashboard.Property(entity => entity.Period).HasMaxLength(32);
